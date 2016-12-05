@@ -180,8 +180,8 @@ public class PeerTableImpl implements IPeerTable {
       }
       else {
         message.setHopByHopIdentifier(peer.getHopByHopIdentifier());
-        peer.addMessage(message);
         message.setPeer(peer);
+        peer.addMessage(message);
       }
     }
     else {
@@ -195,6 +195,15 @@ public class PeerTableImpl implements IPeerTable {
         }
         logger.debug("Found a peer [{}] and setting it as the peer in the message", peer);
         message.setPeer(peer);
+      } else {
+        if (!peer.hasValidConnection()){
+          peer = router.getPeer(message, this);
+          if (peer == null) {
+            throw new RouteException( "Cannot found remote context for sending message" );
+          }
+          logger.debug("Found a peer [{}] and setting it as the peer in the message", peer);
+          message.setPeer(peer);
+        }
       }
     }
 

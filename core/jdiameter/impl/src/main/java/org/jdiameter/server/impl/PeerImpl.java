@@ -137,7 +137,7 @@ public class PeerImpl extends org.jdiameter.client.impl.controller.PeerImpl impl
   }
 
   public IContext getContext() {
-    return new LocalActionConext(); 
+    return new LocalActionConext(this);
   }
 
   public IConnection getConnection() {
@@ -183,6 +183,11 @@ public class PeerImpl extends org.jdiameter.client.impl.controller.PeerImpl impl
   }
 
   protected class LocalActionConext extends ActionContext {
+    private IPeer peer;
+
+    public LocalActionConext(IPeer peer){
+      this.peer = peer;
+    }
 
     public void sendCeaMessage(int resultCode, Message cer,  String errMessage) throws TransportException, OverloadException {
       logger.debug("Send CEA message");
@@ -309,6 +314,8 @@ public class PeerImpl extends org.jdiameter.client.impl.controller.PeerImpl impl
     public boolean receiveMessage(IMessage message) {
       logger.debug("Receiving message in server.");
       boolean isProcessed = false;
+      logger.info("PeerImpl::receiveMessage::setPeer::" + peer);
+      message.setPeer(peer);
 
       if (message.isRequest()) {
         IRequest req = message;
@@ -373,7 +380,11 @@ public class PeerImpl extends org.jdiameter.client.impl.controller.PeerImpl impl
                 sendErrorAnswer(message, null, ResultCode.APPLICATION_UNSUPPORTED);
                 // or REALM_NOT_SERVED ?
                 return true;
-              }	
+              }
+
+              //try to add to the message the PEER that is processing it
+              logger.info("PeerImpl::receiveMessage::setPeer");
+              message.setPeer(peer);
 
               switch (action) {
                 case LOCAL: // always call listener - this covers realms
@@ -577,7 +588,9 @@ public class PeerImpl extends org.jdiameter.client.impl.controller.PeerImpl impl
                   peerTable.saveToDuplicate(message.getDuplicationKey(), answer);
                 }
                 isProcessed = true;
-                if(isProcessed && answer != null) {
+                if (isProcessed && answer != null) {
+                  logger.info("PeerImpl::consumeMessage::answer.setPeer(message.getPeer())");
+                  answer.setPeer(message.getPeer());
                   sendMessage(answer);
                 }
                 if (statistic.isEnabled()) {
