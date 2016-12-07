@@ -242,21 +242,6 @@
   </profiles>
 
   <repositories>
-    <repository>
-      <id>mobicents-public-repository-group</id>
-      <name>Mobicents Public Maven Repository Group</name>
-      <url>https://oss.sonatype.org/content/groups/public</url>
-      <layout>default</layout>
-      <releases>
-        <enabled>true</enabled>
-        <updatePolicy>never</updatePolicy>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-        <updatePolicy>never</updatePolicy>
-      </snapshots>
-    </repository>
-
 
     <repository>
         <id>onevox</id>
