@@ -24,6 +24,8 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.InputStream;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -43,12 +45,17 @@ import org.jdiameter.api.Request;
 import org.jdiameter.client.api.controller.IPeer;
 import org.jdiameter.server.impl.StackImpl;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
+import org.mobicents.diameter.stack.functional.acc.base.AccSessionFTFlowTest;
 
 /**
- * 
+ *
  * @author <a href="mailto:brainslog@gmail.com"> Alexandre Mendonca </a>
  * @author <a href="mailto:baranowb@gmail.com"> Bartosz Baranowski </a>
  */
+@RunWith(Parameterized.class)
 public class StackConnectDelayTest {
 
   private static Logger logger = Logger.getLogger(StackConnectDelayTest.class);
@@ -57,17 +64,30 @@ public class StackConnectDelayTest {
   // 2. start client + wait for connection
   // 3. stop client, start it again
   // 4. wait for connection
+  String serverConfigName;
+  String client1ConfigName;
+  String client2ConfigName;
+  
+  public StackConnectDelayTest(String serverConfigName, String client1ConfigName, String client2ConfigName){
+   this.serverConfigName =serverConfigName;
+   this.client1ConfigName = client1ConfigName;
+   this.client2ConfigName = client2ConfigName;
+  }
 
+  
+  @Parameters
+  public static Collection<Object[]> data() {
+    return Arrays.asList(new Object[][] { { "jdiameter-server-two-delay.xml", "jdiameter-client-two.xml", "jdiameter-client-two-second.xml" },
+      { "netty/tcp/jdiameter-server-two-delay.xml", "netty/tcp/jdiameter-client-two.xml", "netty/tcp/jdiameter-client-two-second.xml" },
+      { "netty/tls/jdiameter-server-two-delay.xml", "netty/tls/jdiameter-client-two.xml", "netty/tls/jdiameter-client-two-second.xml" }});
+  }
+  
   @Test
   public void testFirstPeerFailsSecondSucceeds() throws Exception {
     StackImpl server = new StackImpl();
     StackImpl client1 = new StackImpl();
     StackImpl client2 = new StackImpl();
     try {
-      String serverConfigName = "jdiameter-server-two-delay.xml";
-      String client1ConfigName = "jdiameter-client-two.xml";
-      String client2ConfigName = "jdiameter-client-two-second.xml";
-
       InputStream serverConfigInputStream = StackConnectDelayTest.class.getClassLoader().getResourceAsStream("configurations/" + serverConfigName);
       InputStream client1ConfigInputStream = StackConnectDelayTest.class.getClassLoader().getResourceAsStream("configurations/" + client1ConfigName);
       InputStream client2ConfigInputStream = StackConnectDelayTest.class.getClassLoader().getResourceAsStream("configurations/" + client2ConfigName);
@@ -81,12 +101,13 @@ public class StackConnectDelayTest {
       Network network = server.unwrap(Network.class);
       network.addNetworkReqListener(new NetworkReqListener() {
 
+        @Override
         public Answer processRequest(Request request) {
           return null;
         }
       }, ApplicationId.createByAccAppId(193, 19302));
       server.start();
-      
+
       List<Peer> peers = server.unwrap(PeerTable.class).getPeerTable();
       assertEquals("Wrong num of connections, initial setup did not succeed. ", 0, peers.size());
       client1.init(client1Config);
@@ -96,19 +117,21 @@ public class StackConnectDelayTest {
       network = client1.unwrap(Network.class);
       network.addNetworkReqListener(new NetworkReqListener() {
 
+        @Override
         public Answer processRequest(Request request) {
           return null;
         }
       }, ApplicationId.createByAccAppId(193, 19302));
-      
+
       network = client2.unwrap(Network.class);
       network.addNetworkReqListener(new NetworkReqListener() {
 
+        @Override
         public Answer processRequest(Request request) {
           return null;
         }
       }, ApplicationId.createByAccAppId(193, 19302));
-      
+
       try {
         client1.start(Mode.ALL_PEERS, 5000, TimeUnit.MILLISECONDS);
         fail("Client 1 should not be able to connect since server should not be bound.");
@@ -134,7 +157,7 @@ public class StackConnectDelayTest {
       assertTrue("Peer not connected. State[" + p.getState(PeerState.class) + "]", ((IPeer) peers.get(0)).isConnected());
       assertEquals("Peer has wrong realm.","mobicents.org", p.getRealmName());
 
-      
+
     }
     finally {
       try {

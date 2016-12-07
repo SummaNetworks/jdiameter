@@ -1,23 +1,20 @@
 /*
- * JBoss, Home of Professional Open Source
- * Copyright 2011, Red Hat, Inc. and individual contributors
- * by the @authors tag. See the copyright.txt in the distribution for a
- * full listing of individual contributors.
+ * TeleStax, Open Source Cloud Communications
+ * Copyright 2011-2016, Telestax Inc and individual contributors
+ * by the @authors tag.
  *
- * This is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 2.1 of
+ * This program is free software: you can redistribute it and/or modify
+ * under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation; either version 3 of
  * the License, or (at your option) any later version.
  *
- * This software is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
- * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
 package org.jdiameter.common.impl.app.rx;
@@ -34,41 +31,31 @@ import org.jdiameter.api.app.AppAnswerEvent;
 import org.jdiameter.api.app.AppRequestEvent;
 import org.jdiameter.api.app.AppSession;
 import org.jdiameter.api.app.StateChangeListener;
-
-//import org.jdiameter.api.auth.events.ReAuthAnswer;
-//import org.jdiameter.api.auth.events.ReAuthRequest;
-import org.jdiameter.api.rx.events.RxReAuthAnswer;
-import org.jdiameter.api.rx.events.RxReAuthRequest;
-
-
-//import org.jdiameter.api.auth.events.AbortSessionAnswer;
-//import org.jdiameter.api.auth.events.AbortSessionRequest;
-import org.jdiameter.api.rx.events.RxAbortSessionAnswer;
-import org.jdiameter.api.rx.events.RxAbortSessionRequest;
-
-
-
-//import org.jdiameter.api.auth.events.SessionTermAnswer;
-//import org.jdiameter.api.auth.events.SessionTermRequest;
-import org.jdiameter.api.rx.events.RxSessionTermAnswer;
-import org.jdiameter.api.rx.events.RxSessionTermRequest;
-
 import org.jdiameter.api.rx.ClientRxSession;
 import org.jdiameter.api.rx.ClientRxSessionListener;
 import org.jdiameter.api.rx.ServerRxSession;
 import org.jdiameter.api.rx.ServerRxSessionListener;
 import org.jdiameter.api.rx.events.RxAAAnswer;
 import org.jdiameter.api.rx.events.RxAARequest;
+//import org.jdiameter.api.auth.events.AbortSessionAnswer;
+//import org.jdiameter.api.auth.events.AbortSessionRequest;
+import org.jdiameter.api.rx.events.RxAbortSessionAnswer;
+import org.jdiameter.api.rx.events.RxAbortSessionRequest;
+//import org.jdiameter.api.auth.events.ReAuthAnswer;
+//import org.jdiameter.api.auth.events.ReAuthRequest;
+import org.jdiameter.api.rx.events.RxReAuthAnswer;
+import org.jdiameter.api.rx.events.RxReAuthRequest;
+//import org.jdiameter.api.auth.events.SessionTermAnswer;
+//import org.jdiameter.api.auth.events.SessionTermRequest;
+import org.jdiameter.api.rx.events.RxSessionTermAnswer;
+import org.jdiameter.api.rx.events.RxSessionTermRequest;
 import org.jdiameter.client.api.ISessionFactory;
 import org.jdiameter.client.impl.app.rx.ClientRxSessionImpl;
-
 import org.jdiameter.client.impl.app.rx.IClientRxSessionData;
 import org.jdiameter.common.api.app.IAppSessionDataFactory;
-
-import org.jdiameter.common.api.app.rx.IRxSessionData;
-
 import org.jdiameter.common.api.app.rx.IClientRxSessionContext;
 import org.jdiameter.common.api.app.rx.IRxMessageFactory;
+import org.jdiameter.common.api.app.rx.IRxSessionData;
 import org.jdiameter.common.api.app.rx.IRxSessionFactory;
 import org.jdiameter.common.api.app.rx.IServerRxSessionContext;
 import org.jdiameter.common.api.data.ISessionDatasource;
@@ -85,7 +72,6 @@ import org.jdiameter.common.api.data.ISessionDatasource;
 
 import org.jdiameter.server.impl.app.rx.IServerRxSessionData;
 import org.jdiameter.server.impl.app.rx.ServerRxSessionImpl;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -97,7 +83,7 @@ import org.slf4j.LoggerFactory;
  * @author <a href="mailto:baranowb@gmail.com"> Bartosz Baranowski </a>
  */
 public class RxSessionFactoryImpl implements IRxSessionFactory, ClientRxSessionListener, ServerRxSessionListener, StateChangeListener<AppSession>,
-IRxMessageFactory, IServerRxSessionContext, IClientRxSessionContext {
+    IRxMessageFactory, IServerRxSessionContext, IClientRxSessionContext {
 
   // Message timeout value (in milliseconds)
   protected int defaultDirectDebitingFailureHandling = 0;
@@ -112,7 +98,7 @@ IRxMessageFactory, IServerRxSessionContext, IClientRxSessionContext {
   protected IServerRxSessionContext serverContextListener;
   protected IClientRxSessionContext clientContextListener;
   protected IRxMessageFactory messageFactory;
-  protected Logger logger = LoggerFactory.getLogger(RxSessionFactoryImpl.class);
+  protected static final Logger logger = LoggerFactory.getLogger(RxSessionFactoryImpl.class);
   protected ISessionDatasource iss;
   protected ISessionFactory sessionFactory = null;
   protected IAppSessionDataFactory<IRxSessionData> sessionDataFactory;
@@ -124,7 +110,7 @@ IRxMessageFactory, IServerRxSessionContext, IClientRxSessionContext {
     this.iss = this.sessionFactory.getContainer().getAssemblerFacility().getComponentInstance(ISessionDatasource.class);
     this.sessionDataFactory = (IAppSessionDataFactory<IRxSessionData>) this.iss.getDataFactory(IRxSessionData.class);
 
-    if(this.sessionDataFactory == null) {
+    if (this.sessionDataFactory == null) {
       logger.debug("Initialized Rx SessionDataFactory is null");
     }
   }
@@ -142,14 +128,16 @@ IRxMessageFactory, IServerRxSessionContext, IClientRxSessionContext {
   /**
    * @return the clientSessionListener
    */
+  @Override
   public ClientRxSessionListener getClientSessionListener() {
-    return clientSessionListener != null ? clientSessionListener : this; 
+    return clientSessionListener != null ? clientSessionListener : this;
   }
 
   /**
    * @param clientSessionListener
    *          the clientSessionListener to set
    */
+  @Override
   public void setClientSessionListener(final ClientRxSessionListener clientSessionListener) {
     this.clientSessionListener = clientSessionListener;
   }
@@ -157,6 +145,7 @@ IRxMessageFactory, IServerRxSessionContext, IClientRxSessionContext {
   /**
    * @return the serverSessionListener
    */
+  @Override
   public ServerRxSessionListener getServerSessionListener() {
     return serverSessionListener != null ? serverSessionListener : this;
   }
@@ -165,6 +154,7 @@ IRxMessageFactory, IServerRxSessionContext, IClientRxSessionContext {
    * @param serverSessionListener
    *          the serverSessionListener to set
    */
+  @Override
   public void setServerSessionListener(ServerRxSessionListener serverSessionListener) {
     this.serverSessionListener = serverSessionListener;
   }
@@ -172,6 +162,7 @@ IRxMessageFactory, IServerRxSessionContext, IClientRxSessionContext {
   /**
    * @return the serverContextListener
    */
+  @Override
   public IServerRxSessionContext getServerContextListener() {
     return serverContextListener != null ? serverContextListener : this;
   }
@@ -180,6 +171,7 @@ IRxMessageFactory, IServerRxSessionContext, IClientRxSessionContext {
    * @param serverContextListener
    *          the serverContextListener to set
    */
+  @Override
   public void setServerContextListener(IServerRxSessionContext serverContextListener) {
     this.serverContextListener = serverContextListener;
   }
@@ -187,6 +179,7 @@ IRxMessageFactory, IServerRxSessionContext, IClientRxSessionContext {
   /**
    * @return the clientContextListener
    */
+  @Override
   public IClientRxSessionContext getClientContextListener() {
     return clientContextListener != null ? clientContextListener : this;
   }
@@ -194,6 +187,7 @@ IRxMessageFactory, IServerRxSessionContext, IClientRxSessionContext {
   /**
    * @return the messageFactory
    */
+  @Override
   public IRxMessageFactory getMessageFactory() {
     return messageFactory != null ? messageFactory : this;
   }
@@ -202,6 +196,7 @@ IRxMessageFactory, IServerRxSessionContext, IClientRxSessionContext {
    * @param messageFactory
    *          the messageFactory to set
    */
+  @Override
   public void setMessageFactory(final IRxMessageFactory messageFactory) {
     this.messageFactory = messageFactory;
   }
@@ -210,6 +205,7 @@ IRxMessageFactory, IServerRxSessionContext, IClientRxSessionContext {
    * @param clientContextListener
    *          the clientContextListener to set
    */
+  @Override
   public void setClientContextListener(IClientRxSessionContext clientContextListener) {
     this.clientContextListener = clientContextListener;
   }
@@ -232,6 +228,7 @@ IRxMessageFactory, IServerRxSessionContext, IClientRxSessionContext {
   /**
    * @return the stateListener
    */
+  @Override
   public StateChangeListener<AppSession> getStateListener() {
     return stateListener != null ? stateListener : this;
   }
@@ -240,6 +237,7 @@ IRxMessageFactory, IServerRxSessionContext, IClientRxSessionContext {
    * @param stateListener
    *          the stateListener to set
    */
+  @Override
   public void setStateListener(StateChangeListener<AppSession> stateListener) {
     this.stateListener = stateListener;
   }
@@ -249,21 +247,23 @@ IRxMessageFactory, IServerRxSessionContext, IClientRxSessionContext {
     if (sessionId == null) {
       throw new IllegalArgumentException("SessionId must not be null");
     }
-    if(!this.iss.exists(sessionId)) {
+    if (!this.iss.exists(sessionId)) {
       return null;
     }
     AppSession appSession = null;
     try {
       if (aClass == ClientRxSession.class) {
         IClientRxSessionData sessionData =  (IClientRxSessionData) this.sessionDataFactory.getAppSessionData(ClientRxSession.class, sessionId);
-        ClientRxSessionImpl clientSession = new ClientRxSessionImpl(sessionData, this.getMessageFactory(), sessionFactory, this.getClientSessionListener(), this.getClientContextListener(), this.getStateListener());
+        ClientRxSessionImpl clientSession = new ClientRxSessionImpl(sessionData, this.getMessageFactory(), sessionFactory, this.getClientSessionListener(),
+            this.getClientContextListener(), this.getStateListener());
 
         clientSession.getSessions().get(0).setRequestListener(clientSession);
         appSession = clientSession;
       }
       else if (aClass == ServerRxSession.class) {
         IServerRxSessionData sessionData =  (IServerRxSessionData) this.sessionDataFactory.getAppSessionData(ServerRxSession.class, sessionId);
-        ServerRxSessionImpl serverSession = new ServerRxSessionImpl(sessionData, this.getMessageFactory(), sessionFactory, this.getServerSessionListener(), this.getServerContextListener(), this.getStateListener());
+        ServerRxSessionImpl serverSession = new ServerRxSessionImpl(sessionData, this.getMessageFactory(), sessionFactory, this.getServerSessionListener(),
+            this.getServerContextListener(), this.getStateListener());
 
         serverSession.getSessions().get(0).setRequestListener(serverSession);
         appSession = serverSession;
@@ -280,6 +280,7 @@ IRxMessageFactory, IServerRxSessionContext, IClientRxSessionContext {
   }
 
 
+  @Override
   public AppSession getNewSession(String sessionId, Class<? extends AppSession> aClass, ApplicationId applicationId, Object[] args) {
     AppSession appSession = null;
     try {
@@ -295,7 +296,8 @@ IRxMessageFactory, IServerRxSessionContext, IClientRxSessionContext {
           }
         }
         IClientRxSessionData sessionData =  (IClientRxSessionData) this.sessionDataFactory.getAppSessionData(ClientRxSession.class, sessionId);
-        ClientRxSessionImpl clientSession = new ClientRxSessionImpl(sessionData, this.getMessageFactory(), sessionFactory, this.getClientSessionListener(), this.getClientContextListener(), this.getStateListener());
+        ClientRxSessionImpl clientSession = new ClientRxSessionImpl(sessionData, this.getMessageFactory(), sessionFactory, this.getClientSessionListener(),
+            this.getClientContextListener(), this.getStateListener());
         // this goes first!
         iss.addSession(clientSession);
         clientSession.getSessions().get(0).setRequestListener(clientSession);
@@ -312,7 +314,8 @@ IRxMessageFactory, IServerRxSessionContext, IClientRxSessionContext {
           }
         }
         IServerRxSessionData sessionData =  (IServerRxSessionData) this.sessionDataFactory.getAppSessionData(ServerRxSession.class, sessionId);
-        ServerRxSessionImpl serverSession = new ServerRxSessionImpl(sessionData, this.getMessageFactory(), sessionFactory, this.getServerSessionListener(), this.getServerContextListener(), this.getStateListener());
+        ServerRxSessionImpl serverSession = new ServerRxSessionImpl(sessionData, this.getMessageFactory(), sessionFactory, this.getServerSessionListener(),
+            this.getServerContextListener(), this.getStateListener());
         iss.addSession(serverSession);
         serverSession.getSessions().get(0).setRequestListener(serverSession);
         appSession = serverSession;
@@ -332,67 +335,85 @@ IRxMessageFactory, IServerRxSessionContext, IClientRxSessionContext {
   // Default implementation of methods so there are no exception!
 
   // Message Handlers --------------------------------------------------------
+  @Override
   public void doAARequest(ServerRxSession session, RxAARequest request) throws InternalException {
   }
 
+  @Override
   public void doAAAnswer(ClientRxSession session, RxAARequest request, RxAAAnswer answer) throws InternalException {
   }
 
+  @Override
   public void doReAuthRequest(ClientRxSession session, RxReAuthRequest request) throws InternalException {
   }
 
+  @Override
   public void doReAuthAnswer(ServerRxSession session, RxReAuthRequest request, RxReAuthAnswer answer) throws InternalException {
   }
 
+  @Override
   public void doAbortSessionRequest(ClientRxSession session, RxAbortSessionRequest request) throws InternalException {
   }
 
+  @Override
   public void doAbortSessionAnswer(ServerRxSession session, RxAbortSessionRequest request, RxAbortSessionAnswer answer) throws InternalException {
   }
 
+  @Override
   public void doSessionTermRequest(ServerRxSession session, RxSessionTermRequest request) throws InternalException {
   }
 
+  @Override
   public void doSessionTermAnswer(ClientRxSession session, RxSessionTermRequest request, RxSessionTermAnswer answer) throws InternalException {
   }
 
+  @Override
   public void doOtherEvent(AppSession session, AppRequestEvent request, AppAnswerEvent answer) throws InternalException {
   }
 
   // Message Factory Methods -------------------------------------------------
+  @Override
   public RxAAAnswer createAAAnswer(Answer answer) {
     return new RxAAAnswerImpl(answer);
   }
 
+  @Override
   public RxAARequest createAARequest(Request req) {
     return new RxAARequestImpl(req);
   }
 
+  @Override
   public RxReAuthAnswer createReAuthAnswer(Answer answer) {
     return new RxReAuthAnswerImpl(answer);
   }
 
+  @Override
   public RxReAuthRequest createReAuthRequest(Request req) {
     return new RxReAuthRequestImpl(req);
   }
 
+  @Override
   public RxSessionTermAnswer createSessionTermAnswer(Answer answer) {
     return new RxSessionTermAnswerImpl(answer);
   }
 
+  @Override
   public RxSessionTermRequest createSessionTermRequest(Request req) {
     return new RxSessionTermRequestImpl(req);
   }
 
+  @Override
   public RxAbortSessionAnswer createAbortSessionAnswer(Answer answer) {
     return new RxAbortSessionAnswerImpl(answer);
   }
 
+  @Override
   public RxAbortSessionRequest createAbortSessionRequest(Request req) {
     return new RxAbortSessionRequestImpl(req);
   }
 
   // Context Methods ----------------------------------------------------------
+  @Override
   public void stateChanged(Enum oldState, Enum newState) {
     logger.info("Diameter Rx SessionFactory :: stateChanged :: oldState[{}], newState[{}]", oldState, newState);
   }
@@ -402,24 +423,29 @@ IRxMessageFactory, IServerRxSessionContext, IClientRxSessionContext {
    *
    * @see org.jdiameter.api.app.StateChangeListener#stateChanged(java.lang.Object, java.lang.Enum, java.lang.Enum)
    */
+  @Override
   public void stateChanged(AppSession source, Enum oldState, Enum newState) {
     logger.info("Diameter Rx SessionFactory :: stateChanged :: source[{}], oldState[{}], newState[{}]", new Object[]{source, oldState, newState});
   }
 
   // FIXME: add ctx methods proxy calls!
+  @Override
   public void sessionSupervisionTimerExpired(ServerRxSession session) {
     // this.resourceAdaptor.sessionDestroyed(session.getSessions().get(0).getSessionId(), session);
     session.release();
   }
 
+  @Override
   public void sessionSupervisionTimerReStarted(ServerRxSession session, ScheduledFuture future) {
     // TODO Complete this method.
   }
 
+  @Override
   public void sessionSupervisionTimerStarted(ServerRxSession session, ScheduledFuture future) {
     // TODO Complete this method.
   }
 
+  @Override
   public void sessionSupervisionTimerStopped(ServerRxSession session, ScheduledFuture future) {
     // TODO Complete this method.
   }
@@ -428,10 +454,12 @@ IRxMessageFactory, IServerRxSessionContext, IClientRxSessionContext {
     // FIXME What should we do when there's a timeout?
   }
 
+  @Override
   public void denyAccessOnDeliverFailure(ClientRxSession clientRxSessionImpl, Message request) {
     // TODO Complete this method.
   }
 
+  @Override
   public void denyAccessOnFailureMessage(ClientRxSession clientRxSessionImpl) {
     // TODO Complete this method.
   }
@@ -442,10 +470,12 @@ IRxMessageFactory, IServerRxSessionContext, IClientRxSessionContext {
     clientRxSessionImpl.release();
   }
 
+  @Override
   public void grantAccessOnDeliverFailure(ClientRxSession clientRxSessionImpl, Message request) {
     // TODO Auto-generated method stub
   }
 
+  @Override
   public void grantAccessOnFailureMessage(ClientRxSession clientRxSessionImpl) {
     // TODO Auto-generated method stub
   }
@@ -454,10 +484,12 @@ IRxMessageFactory, IServerRxSessionContext, IClientRxSessionContext {
     // TODO Auto-generated method stub
   }
 
+  @Override
   public void indicateServiceError(ClientRxSession clientRxSessionImpl) {
     // TODO Auto-generated method stub
   }
 
+  @Override
   public long[] getApplicationIds() {
     // FIXME: What should we do here?
     return new long[]{16777236};

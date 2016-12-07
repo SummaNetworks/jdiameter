@@ -12,7 +12,7 @@ case "`uname`" in
     Darwin*)
         darwin=true
         ;;
-        
+
     Linux)
         linux=true
         ;;
@@ -46,26 +46,15 @@ export TEST_CORE
 #Setup the JVM
 if [ "x$JAVA" = "x" ]; then
     if [ "x$JAVA_HOME" != "x" ]; then
-	JAVA="$JAVA_HOME/bin/java"
+        JAVA="$JAVA_HOME/bin/java"
     else
-	JAVA="java"
+        JAVA="java"
     fi
 fi
 
 
 
-RUN_CLASSPATH="$TEST_CORE/target/run/example1.jar.jar"
-RUN_CLASSPATH="$RUN_CLASSPATH:$TEST_CORE/target/xml-apis.jar"
-RUN_CLASSPATH="$RUN_CLASSPATH:$TEST_CORE/target/run/slf4j-log4j12.jar"
-RUN_CLASSPATH="$RUN_CLASSPATH:$TEST_CORE/target/run/slf4j-api.jar"
-RUN_CLASSPATH="$RUN_CLASSPATH:$TEST_CORE/target/run/java-getopt.jar"
-RUN_CLASSPATH="$RUN_CLASSPATH:$TEST_CORE/target/run/picocontainer.jar"
-RUN_CLASSPATH="$RUN_CLASSPATH:$TEST_CORE/target/run/junit.jar"
-RUN_CLASSPATH="$RUN_CLASSPATH:$TEST_CORE/target/run/jdiameter-impl.jar"
-RUN_CLASSPATH="$RUN_CLASSPATH:$TEST_CORE/target/run/jdiameter-api.jar"
-RUN_CLASSPATH="$RUN_CLASSPATH:$TEST_CORE/target/run/log4j.jar"
-RUN_CLASSPATH="$RUN_CLASSPATH:$TEST_CORE/target/run/mux.jar"
-
+RUN_CLASSPATH="$TEST_CORE/target/example1-8.0.0-SUMMA-jar-with-dependencies.jar"
 
 # For Cygwin, switch paths to Windows format before running java
 if $cygwin; then
@@ -155,10 +144,8 @@ executeTest(){
 
 
       "$JAVA" $JAVA_OPTS \
-	-classpath "$RUN_CLASSPATH" \
-	org.example.client.ExampleClient $*
-
-
+        -classpath "$RUN_CLASSPATH" \
+        org.example.client.ExampleClient $*
 
 
 

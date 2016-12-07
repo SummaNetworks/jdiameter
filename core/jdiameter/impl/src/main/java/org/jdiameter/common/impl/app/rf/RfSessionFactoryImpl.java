@@ -1,23 +1,20 @@
 /*
- * JBoss, Home of Professional Open Source
- * Copyright 2008, Red Hat, Inc. and individual contributors
- * by the @authors tag. See the copyright.txt in the distribution for a
- * full listing of individual contributors.
+ * TeleStax, Open Source Cloud Communications
+ * Copyright 2011-2016, Telestax Inc and individual contributors
+ * by the @authors tag.
  *
- * This is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 2.1 of
+ * This program is free software: you can redistribute it and/or modify
+ * under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation; either version 3 of
  * the License, or (at your option) any later version.
  *
- * This software is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
- * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
 package org.jdiameter.common.impl.app.rf;
@@ -57,14 +54,14 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Default Diameter Rf Session Factory implementation
- * 
+ *
  * @author <a href="mailto:baranowb@gmail.com"> Bartosz Baranowski </a>
  * @author <a href="mailto:brainslog@gmail.com"> Alexandre Mendonca </a>
  */
-public class RfSessionFactoryImpl implements IRfSessionFactory, ServerRfSessionListener, ClientRfSessionListener, IClientRfActionContext, IServerRfActionContext,
-StateChangeListener<AppSession> {
+public class RfSessionFactoryImpl implements IRfSessionFactory, ServerRfSessionListener, ClientRfSessionListener, IClientRfActionContext,
+    IServerRfActionContext, StateChangeListener<AppSession> {
 
-  protected Logger logger = LoggerFactory.getLogger(RfSessionFactoryImpl.class);
+  protected static final Logger logger = LoggerFactory.getLogger(RfSessionFactoryImpl.class);
 
   protected ServerRfSessionListener serverSessionListener;
   protected StateChangeListener<AppSession> stateListener;
@@ -95,6 +92,7 @@ StateChangeListener<AppSession> {
   /**
    * @return the serverSessionListener
    */
+  @Override
   public ServerRfSessionListener getServerSessionListener() {
     if (this.serverSessionListener != null) {
       return serverSessionListener;
@@ -107,6 +105,7 @@ StateChangeListener<AppSession> {
    * @param serverSessionListener
    *            the serverSessionListener to set
    */
+  @Override
   public void setServerSessionListener(ServerRfSessionListener serverSessionListener) {
     this.serverSessionListener = serverSessionListener;
   }
@@ -114,6 +113,7 @@ StateChangeListener<AppSession> {
   /**
    * @return the stateListener
    */
+  @Override
   public StateChangeListener<AppSession> getStateListener() {
     if (this.stateListener != null) {
       return stateListener;
@@ -126,6 +126,7 @@ StateChangeListener<AppSession> {
    * @param stateListener
    *            the stateListener to set
    */
+  @Override
   public void setStateListener(StateChangeListener<AppSession> stateListener) {
     this.stateListener = stateListener;
   }
@@ -133,6 +134,7 @@ StateChangeListener<AppSession> {
   /**
    * @return the clientSessionListener
    */
+  @Override
   public ClientRfSessionListener getClientSessionListener() {
     if (this.clientSessionListener != null) {
       return clientSessionListener;
@@ -145,6 +147,7 @@ StateChangeListener<AppSession> {
    * @param clientSessionListener
    *            the clientSessionListener to set
    */
+  @Override
   public void setClientSessionListener(ClientRfSessionListener clientSessionListener) {
     this.clientSessionListener = clientSessionListener;
   }
@@ -152,6 +155,7 @@ StateChangeListener<AppSession> {
   /**
    * @return the clientContextListener
    */
+  @Override
   public IClientRfActionContext getClientContextListener() {
     if (this.clientContextListener != null) {
       return clientContextListener;
@@ -164,6 +168,7 @@ StateChangeListener<AppSession> {
    * @param clientContextListener
    *            the clientContextListener to set
    */
+  @Override
   public void setClientContextListener(IClientRfActionContext clientContextListener) {
     this.clientContextListener = clientContextListener;
   }
@@ -171,6 +176,7 @@ StateChangeListener<AppSession> {
   /**
    * @return the serverContextListener
    */
+  @Override
   public IServerRfActionContext getServerContextListener() {
     if (this.serverContextListener != null) {
       return serverContextListener;
@@ -183,6 +189,7 @@ StateChangeListener<AppSession> {
    * @param serverContextListener
    *            the serverContextListener to set
    */
+  @Override
   public void setServerContextListener(IServerRfActionContext serverContextListener) {
     this.serverContextListener = serverContextListener;
   }
@@ -190,6 +197,7 @@ StateChangeListener<AppSession> {
   /**
    * @return the messageTimeout
    */
+  @Override
   public long getMessageTimeout() {
     return messageTimeout;
   }
@@ -198,6 +206,7 @@ StateChangeListener<AppSession> {
    * @param messageTimeout
    *            the messageTimeout to set
    */
+  @Override
   public void setMessageTimeout(long messageTimeout) {
     this.messageTimeout = messageTimeout;
   }
@@ -222,21 +231,23 @@ StateChangeListener<AppSession> {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see
    * org.jdiameter.common.api.app.acc.IAccSessionFactory#getApplicationId()
    */
+  @Override
   public ApplicationId getApplicationId() {
     return this.applicationId;
   }
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see
    * org.jdiameter.common.api.app.acc.IAccSessionFactory#setApplicationId(
    * org.jdiameter.api.ApplicationId)
    */
+  @Override
   public void setApplicationId(ApplicationId id) {
     this.applicationId = id;
   }
@@ -264,8 +275,8 @@ StateChangeListener<AppSession> {
       }
       else if (aClass == ClientRfSession.class) {
         IClientRfSessionData sessionData = (IClientRfSessionData) this.sessionDataFactory.getAppSessionData(ClientRfSession.class, sessionId);
-        ClientRfSessionImpl session = new ClientRfSessionImpl(sessionData, sessionFactory, getClientSessionListener(), getClientContextListener(), getStateListener(),
-            this.getApplicationId());
+        ClientRfSessionImpl session = new ClientRfSessionImpl(sessionData, sessionFactory, getClientSessionListener(), getClientContextListener(),
+            getStateListener(), this.getApplicationId());
 
         session.getSessions().get(0).setRequestListener(session);
         appSession = session;
@@ -280,6 +291,7 @@ StateChangeListener<AppSession> {
 
     return appSession;
   }
+  @Override
   public AppSession getNewSession(String sessionId, Class<? extends AppSession> aClass, ApplicationId applicationId, Object[] args) {
     try {
       if (aClass == ServerRfSession.class) {
@@ -314,8 +326,8 @@ StateChangeListener<AppSession> {
         }
         IClientRfSessionData sessionData = (IClientRfSessionData) this.sessionDataFactory.getAppSessionData(ClientRfSession.class, sessionId);
         sessionData.setApplicationId(applicationId);
-        ClientRfSessionImpl session = new ClientRfSessionImpl(sessionData, sessionFactory, getClientSessionListener(), getClientContextListener(), getStateListener(),
-            this.getApplicationId());
+        ClientRfSessionImpl session = new ClientRfSessionImpl(sessionData, sessionFactory, getClientSessionListener(), getClientContextListener(),
+            getStateListener(), this.getApplicationId());
 
         iss.addSession(session);
         session.getSessions().get(0).setRequestListener(session);
@@ -335,6 +347,7 @@ StateChangeListener<AppSession> {
   // State Change Listener
   // ----------------------------------------------------
 
+  @Override
   @SuppressWarnings("unchecked")
   public void stateChanged(Enum oldState, Enum newState) {
     logger.info("Diameter ACC SessionFactory :: stateChanged :: oldState[{}], newState[{}]", oldState, newState);
@@ -342,11 +355,12 @@ StateChangeListener<AppSession> {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see
    * org.jdiameter.api.app.StateChangeListener#stateChanged(java.lang.Object,
    * java.lang.Enum, java.lang.Enum)
    */
+  @Override
   @SuppressWarnings("unchecked")
   public void stateChanged(AppSession source, Enum oldState, Enum newState) {
     logger.info("Diameter Rf SessionFactory :: stateChanged :: source[{}], oldState[{}], newState[{}]", new Object[] { source, oldState, newState });
@@ -356,17 +370,21 @@ StateChangeListener<AppSession> {
   // Event listeners //
   // ///////////////////
 
-  public void doRfAccountingRequestEvent(ServerRfSession appSession, RfAccountingRequest acr) throws InternalException, IllegalDiameterStateException, RouteException, OverloadException {
+  @Override
+  public void doRfAccountingRequestEvent(ServerRfSession appSession, RfAccountingRequest acr)
+      throws InternalException, IllegalDiameterStateException, RouteException, OverloadException {
     logger.info("Diameter Base RfSessionFactory :: doAccRequestEvent :: appSession[" + appSession + "], Request[" + acr + "]");
   }
 
-  public void doRfAccountingAnswerEvent(ClientRfSession appSession, RfAccountingRequest acr, RfAccountingAnswer aca) throws InternalException, IllegalDiameterStateException, RouteException,
-  OverloadException {
+  @Override
+  public void doRfAccountingAnswerEvent(ClientRfSession appSession, RfAccountingRequest acr, RfAccountingAnswer aca)
+      throws InternalException, IllegalDiameterStateException, RouteException, OverloadException {
     logger.info("doRfAnswerEvent :: appSession[" + appSession + "], Request[" + acr + "], Answer[" + aca + "]");
   }
 
-  public void doOtherEvent(AppSession appSession, AppRequestEvent request, AppAnswerEvent answer) throws InternalException, IllegalDiameterStateException, RouteException,
-  OverloadException {
+  @Override
+  public void doOtherEvent(AppSession appSession, AppRequestEvent request, AppAnswerEvent answer)
+      throws InternalException, IllegalDiameterStateException, RouteException, OverloadException {
     logger.info("Diameter Base RfountingSessionFactory :: doOtherEvent :: appSession[" + appSession + "], Request[" + request + "], Answer[" + answer + "]");
   }
 
@@ -375,22 +393,24 @@ StateChangeListener<AppSession> {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see
    * org.jdiameter.common.api.app.Rf.IClientRfActionContext#disconnectUserOrDev
    * (org.jdiameter.api.Request)
    */
+  @Override
   public void disconnectUserOrDev(ClientRfSession appSession, Request sessionTermRequest) throws InternalException {
     logger.info("disconnectUserOrDev :: appSession[" + appSession + "], Request[" + sessionTermRequest + "]");
   }
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see
    * org.jdiameter.common.api.app.Rf.IClientRfActionContext#failedSendRecord
    * (org.jdiameter.api.Request)
    */
+  @Override
   public boolean failedSendRecord(ClientRfSession appSession, Request rfRequest) throws InternalException {
     logger.info("failedSendRecord :: appSession[" + appSession + "], Request[" + rfRequest + "]");
     return false;
@@ -398,10 +418,11 @@ StateChangeListener<AppSession> {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see org.jdiameter.common.api.app.acc.IClientAccActionContext#
    * interimIntervalElapses(org.jdiameter.api.Request)
    */
+  @Override
   public void interimIntervalElapses(ClientRfSession appSession, Request interimRequest) throws InternalException {
     logger.info("interimIntervalElapses :: appSession[" + appSession + "], Request[" + interimRequest + "]");
   }
@@ -411,22 +432,24 @@ StateChangeListener<AppSession> {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @seeorg.jdiameter.common.api.app.Rf.IServerRfActionContext#
    * sessionTimeoutElapses(org.jdiameter.api.Rf.ServerRfSession)
    */
+  @Override
   public void sessionTimeoutElapses(ServerRfSession appSession) throws InternalException {
     logger.info("sessionTimeoutElapses :: appSession[" + appSession + "]");
   }
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see
    * org.jdiameter.common.api.app.Rf.IServerRfActionContext#sessionTimerStarted
    * (org.jdiameter.api.Rf.ServerRfSession,
    * java.util.concurrent.ScheduledFuture)
    */
+  @Override
   @SuppressWarnings("unchecked")
   public void sessionTimerStarted(ServerRfSession appSession, ScheduledFuture timer) throws InternalException {
     logger.info("sessionTimerStarted :: appSession[" + appSession + "]");
@@ -434,12 +457,13 @@ StateChangeListener<AppSession> {
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see
    * org.jdiameter.common.api.app.Rf.IServerRfActionContext#srssionTimerCanceled
    * (org.jdiameter.api.Rf.ServerRfSession,
    * java.util.concurrent.ScheduledFuture)
    */
+  @Override
   @SuppressWarnings("unchecked")
   public void sessionTimerCanceled(ServerRfSession appSession, ScheduledFuture timer) throws InternalException {
     logger.info("sessionTimerCanceled :: appSession[" + appSession + "]");

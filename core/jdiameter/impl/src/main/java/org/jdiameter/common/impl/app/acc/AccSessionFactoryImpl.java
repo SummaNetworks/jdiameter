@@ -1,23 +1,20 @@
 /*
- * JBoss, Home of Professional Open Source
- * Copyright 2006, Red Hat, Inc. and individual contributors
- * by the @authors tag. See the copyright.txt in the distribution for a
- * full listing of individual contributors.
+ * TeleStax, Open Source Cloud Communications
+ * Copyright 2011-2016, Telestax Inc and individual contributors
+ * by the @authors tag.
  *
- * This is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 2.1 of
+ * This program is free software: you can redistribute it and/or modify
+ * under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation; either version 3 of
  * the License, or (at your option) any later version.
  *
- * This software is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
- * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
 package org.jdiameter.common.impl.app.acc;
@@ -59,13 +56,14 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Default Diameter Account Session Factory implementation
- * 
+ *
  * @author <a href="mailto:baranowb@gmail.com"> Bartosz Baranowski </a>
  * @author <a href="mailto:brainslog@gmail.com"> Alexandre Mendonca </a>
  */
-public class AccSessionFactoryImpl implements IAccSessionFactory,IAccMessageFactory, ServerAccSessionListener, ClientAccSessionListener, IClientAccActionContext, IServerAccActionContext, StateChangeListener<AppSession> {
+public class AccSessionFactoryImpl implements IAccSessionFactory, IAccMessageFactory, ServerAccSessionListener, ClientAccSessionListener,
+    IClientAccActionContext, IServerAccActionContext, StateChangeListener<AppSession> {
 
-  protected Logger logger = LoggerFactory.getLogger(AccSessionFactoryImpl.class);
+  protected static final Logger logger = LoggerFactory.getLogger(AccSessionFactoryImpl.class);
 
   protected ServerAccSessionListener serverSessionListener;
   protected StateChangeListener<AppSession> stateListener;
@@ -93,6 +91,7 @@ public class AccSessionFactoryImpl implements IAccSessionFactory,IAccMessageFact
   /**
    * @return the serverSessionListener
    */
+  @Override
   public ServerAccSessionListener getServerSessionListener() {
     if (this.serverSessionListener != null) {
       return serverSessionListener;
@@ -106,6 +105,7 @@ public class AccSessionFactoryImpl implements IAccSessionFactory,IAccMessageFact
    * @param serverSessionListener
    *          the serverSessionListener to set
    */
+  @Override
   public void setServerSessionListener(ServerAccSessionListener serverSessionListener) {
     this.serverSessionListener = serverSessionListener;
   }
@@ -113,6 +113,7 @@ public class AccSessionFactoryImpl implements IAccSessionFactory,IAccMessageFact
   /**
    * @return the stateListener
    */
+  @Override
   public StateChangeListener<AppSession> getStateListener() {
     if (this.stateListener != null) {
       return stateListener;
@@ -126,6 +127,7 @@ public class AccSessionFactoryImpl implements IAccSessionFactory,IAccMessageFact
    * @param stateListener
    *          the stateListener to set
    */
+  @Override
   public void setStateListener(StateChangeListener<AppSession> stateListener) {
     this.stateListener = stateListener;
   }
@@ -133,6 +135,7 @@ public class AccSessionFactoryImpl implements IAccSessionFactory,IAccMessageFact
   /**
    * @return the clientSessionListener
    */
+  @Override
   public ClientAccSessionListener getClientSessionListener() {
     if (this.clientSessionListener != null) {
       return clientSessionListener;
@@ -146,6 +149,7 @@ public class AccSessionFactoryImpl implements IAccSessionFactory,IAccMessageFact
    * @param clientSessionListener
    *          the clientSessionListener to set
    */
+  @Override
   public void setClientSessionListener(ClientAccSessionListener clientSessionListener) {
     this.clientSessionListener = clientSessionListener;
   }
@@ -153,6 +157,7 @@ public class AccSessionFactoryImpl implements IAccSessionFactory,IAccMessageFact
   /**
    * @return the clientContextListener
    */
+  @Override
   public IClientAccActionContext getClientContextListener() {
     if (this.clientContextListener != null) {
       return clientContextListener;
@@ -166,6 +171,7 @@ public class AccSessionFactoryImpl implements IAccSessionFactory,IAccMessageFact
    * @param clientContextListener
    *          the clientContextListener to set
    */
+  @Override
   public void setClientContextListener(IClientAccActionContext clientContextListener) {
     this.clientContextListener = clientContextListener;
   }
@@ -173,6 +179,7 @@ public class AccSessionFactoryImpl implements IAccSessionFactory,IAccMessageFact
   /**
    * @return the serverContextListener
    */
+  @Override
   public IServerAccActionContext getServerContextListener() {
     if (this.serverContextListener != null) {
       return serverContextListener;
@@ -186,19 +193,20 @@ public class AccSessionFactoryImpl implements IAccSessionFactory,IAccMessageFact
    * @param serverContextListener
    *          the serverContextListener to set
    */
+  @Override
   public void setServerContextListener(IServerAccActionContext serverContextListener) {
     this.serverContextListener = serverContextListener;
   }
 
-  public void setMessageFactory(IAccMessageFactory messageFactory)
-  {
-	this.messageFactory = messageFactory;
+  @Override
+  public void setMessageFactory(IAccMessageFactory messageFactory) {
+    this.messageFactory = messageFactory;
   }
-  
-  public IAccMessageFactory getMessageFactory()
-  {
-	  return this.messageFactory;
-	  
+
+  @Override
+  public IAccMessageFactory getMessageFactory() {
+    return this.messageFactory;
+
   }
   /**
    * @return the sessionFactory
@@ -224,18 +232,20 @@ public class AccSessionFactoryImpl implements IAccSessionFactory,IAccMessageFact
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see org.jdiameter.common.api.app.acc.IAccSessionFactory#getApplicationId()
    */
+  @Override
   public ApplicationId getApplicationId() {
     return this.applicationId;
   }
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see org.jdiameter.common.api.app.acc.IAccSessionFactory#setApplicationId( org.jdiameter.api.ApplicationId)
    */
+  @Override
   public void setApplicationId(ApplicationId id) {
     this.applicationId = id;
   }
@@ -247,14 +257,15 @@ public class AccSessionFactoryImpl implements IAccSessionFactory,IAccMessageFact
     if (sessionId == null) {
       throw new IllegalArgumentException("SessionId must not be null");
     }
-    if(!this.iss.exists(sessionId)) {
+    if (!this.iss.exists(sessionId)) {
       return null;
     }
     AppSession appSession = null;
     try {
       if (aClass == ClientAccSession.class) {
         IClientAccSessionData data = (IClientAccSessionData) this.sessionDataFactory.getAppSessionData(ClientAccSession.class, sessionId);
-        ClientAccSessionImpl clientSession = new ClientAccSessionImpl(data, sessionFactory, getClientSessionListener(), getClientContextListener(), getStateListener());
+        ClientAccSessionImpl clientSession =
+            new ClientAccSessionImpl(data, sessionFactory, getClientSessionListener(), getClientContextListener(), getStateListener());
 
         clientSession.getSessions().get(0).setRequestListener(clientSession);
         appSession = clientSession;
@@ -264,7 +275,7 @@ public class AccSessionFactoryImpl implements IAccSessionFactory,IAccMessageFact
         IServerAccSessionData data = (IServerAccSessionData) this.sessionDataFactory.getAppSessionData(ServerAccSession.class, sessionId);
 
         //here we use shorter con, since some data is already present.
-        serverSession = new ServerAccSessionImpl(data,sessionFactory,  getServerSessionListener(), getServerContextListener(), getStateListener());
+        serverSession = new ServerAccSessionImpl(data, sessionFactory,  getServerSessionListener(), getServerContextListener(), getStateListener());
         serverSession.getSessions().get(0).setRequestListener(serverSession);
         appSession = serverSession;
       }
@@ -279,6 +290,7 @@ public class AccSessionFactoryImpl implements IAccSessionFactory,IAccMessageFact
     return appSession;
   }
 
+  @Override
   public AppSession getNewSession(String sessionId, Class<? extends AppSession> aClass, ApplicationId applicationId, Object[] args) {
     try {
       if (aClass == ServerAccSession.class) {
@@ -292,17 +304,18 @@ public class AccSessionFactoryImpl implements IAccSessionFactory,IAccMessageFact
           }
         }
         boolean stateless = true;
-        if(args != null && args.length > 0) {
-          for(Object o:args) {
-            if(o instanceof Boolean) {
-              stateless = (Boolean)o;
+        if (args != null && args.length > 0) {
+          for (Object o:args) {
+            if (o instanceof Boolean) {
+              stateless = (Boolean) o;
             }
           }
         }
 
         IServerAccSessionData data = (IServerAccSessionData) this.sessionDataFactory.getAppSessionData(ServerAccSession.class, sessionId);
         data.setApplicationId(applicationId);
-        ServerAccSessionImpl session = new ServerAccSessionImpl(data, sessionFactory,  getServerSessionListener(), getServerContextListener(), getStateListener(), stateless);
+        ServerAccSessionImpl session = new ServerAccSessionImpl(data, sessionFactory, getServerSessionListener(), getServerContextListener(),
+            getStateListener(), stateless);
         iss.addSession(session);
         session.getSessions().get(0).setRequestListener(session);
         return session;
@@ -319,7 +332,8 @@ public class AccSessionFactoryImpl implements IAccSessionFactory,IAccMessageFact
         }
         IClientAccSessionData data = (IClientAccSessionData) this.sessionDataFactory.getAppSessionData(ClientAccSession.class, sessionId);
         data.setApplicationId(applicationId);
-        ClientAccSessionImpl session = new ClientAccSessionImpl(data, sessionFactory, getClientSessionListener(), getClientContextListener(), getStateListener());
+        ClientAccSessionImpl session = new ClientAccSessionImpl(data, sessionFactory, getClientSessionListener(), getClientContextListener(),
+            getStateListener());
 
         iss.addSession(session);
         session.getSessions().get(0).setRequestListener(session);
@@ -333,17 +347,19 @@ public class AccSessionFactoryImpl implements IAccSessionFactory,IAccMessageFact
     return null;
   }
 
-  // State Change Listener ---------------------------------------------------- 
+  // State Change Listener ----------------------------------------------------
 
+  @Override
   public void stateChanged(Enum oldState, Enum newState) {
     logger.info("Diameter ACC SessionFactory :: stateChanged :: oldState[{}], newState[{}]", oldState, newState);
   }
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see org.jdiameter.api.app.StateChangeListener#stateChanged(java.lang.Object, java.lang.Enum, java.lang.Enum)
    */
+  @Override
   public void stateChanged(AppSession source, Enum oldState, Enum newState) {
     logger.info("Diameter ACC SessionFactory :: stateChanged :: source[{}], oldState[{}], newState[{}]", new Object[] { source, oldState, newState });
   }
@@ -352,15 +368,21 @@ public class AccSessionFactoryImpl implements IAccSessionFactory,IAccMessageFact
   // Event listeners //
   // ///////////////////
 
-  public void doAccRequestEvent(ServerAccSession appSession, AccountRequest acr) throws InternalException, IllegalDiameterStateException, RouteException, OverloadException {
+  @Override
+  public void doAccRequestEvent(ServerAccSession appSession, AccountRequest acr)
+      throws InternalException, IllegalDiameterStateException, RouteException, OverloadException {
     logger.info("Diameter Base AccountingSessionFactory :: doAccRequestEvent :: appSession[" + appSession + "], Request[" + acr + "]");
   }
 
-  public void doAccAnswerEvent(ClientAccSession appSession, AccountRequest acr, AccountAnswer aca) throws InternalException, IllegalDiameterStateException, RouteException, OverloadException {
+  @Override
+  public void doAccAnswerEvent(ClientAccSession appSession, AccountRequest acr, AccountAnswer aca)
+      throws InternalException, IllegalDiameterStateException, RouteException, OverloadException {
     logger.info("doAccAnswerEvent :: appSession[" + appSession + "], Request[" + acr + "], Answer[" + aca + "]");
   }
 
-  public void doOtherEvent(AppSession appSession, AppRequestEvent request, AppAnswerEvent answer) throws InternalException, IllegalDiameterStateException, RouteException, OverloadException {
+  @Override
+  public void doOtherEvent(AppSession appSession, AppRequestEvent request, AppAnswerEvent answer)
+      throws InternalException, IllegalDiameterStateException, RouteException, OverloadException {
     logger.info("Diameter Base AccountingSessionFactory :: doOtherEvent :: appSession[" + appSession + "], Request[" + request + "], Answer[" + answer + "]");
   }
 
@@ -368,18 +390,20 @@ public class AccSessionFactoryImpl implements IAccSessionFactory,IAccMessageFact
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see org.jdiameter.common.api.app.acc.IClientAccActionContext#disconnectUserOrDev (org.jdiameter.api.Request)
    */
+  @Override
   public void disconnectUserOrDev(ClientAccSession appSession, Request sessionTermRequest) throws InternalException {
     logger.info("disconnectUserOrDev :: appSession[" + appSession + "], Request[" + sessionTermRequest + "]");
   }
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see org.jdiameter.common.api.app.acc.IClientAccActionContext#failedSendRecord (org.jdiameter.api.Request)
    */
+  @Override
   public boolean failedSendRecord(ClientAccSession appSession, Request accRequest) throws InternalException {
     logger.info("failedSendRecord :: appSession[" + appSession + "], Request[" + accRequest + "]");
     return false;
@@ -387,9 +411,10 @@ public class AccSessionFactoryImpl implements IAccSessionFactory,IAccMessageFact
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see org.jdiameter.common.api.app.acc.IClientAccActionContext# interimIntervalElapses(org.jdiameter.api.Request)
    */
+  @Override
   public void interimIntervalElapses(ClientAccSession appSession, Request interimRequest) throws InternalException {
     logger.info("interimIntervalElapses :: appSession[" + appSession + "], Request[" + interimRequest + "]");
   }
@@ -398,9 +423,10 @@ public class AccSessionFactoryImpl implements IAccSessionFactory,IAccMessageFact
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @seeorg.jdiameter.common.api.app.acc.IServerAccActionContext#sessionTimeoutElapses(org.jdiameter.api.acc.ServerAccSession)
    */
+  @Override
   public void sessionTimeoutElapses(ServerAccSession appSession) throws InternalException {
     logger.info("sessionTimeoutElapses :: appSession[" + appSession + "]");
 
@@ -408,9 +434,11 @@ public class AccSessionFactoryImpl implements IAccSessionFactory,IAccMessageFact
 
   /*
    * (non-Javadoc)
-   * 
-   * @see org.jdiameter.common.api.app.acc.IServerAccActionContext#sessionTimerStarted(org.jdiameter.api.acc.ServerAccSession, java.util.concurrent.ScheduledFuture)
+   *
+   * @see org.jdiameter.common.api.app.acc.IServerAccActionContext#
+   *    sessionTimerStarted(org.jdiameter.api.acc.ServerAccSession, java.util.concurrent.ScheduledFuture)
    */
+  @Override
   @SuppressWarnings("unchecked")
   public void sessionTimerStarted(ServerAccSession appSession, ScheduledFuture timer) throws InternalException {
     logger.info("sessionTimerStarted :: appSession[" + appSession + "]");
@@ -418,49 +446,45 @@ public class AccSessionFactoryImpl implements IAccSessionFactory,IAccMessageFact
 
   /*
    * (non-Javadoc)
-   * 
-   * @see org.jdiameter.common.api.app.acc.IServerAccActionContext#srssionTimerCanceled(org.jdiameter.api.acc.ServerAccSession, java.util.concurrent.ScheduledFuture)
+   *
+   * @see org.jdiameter.common.api.app.acc.IServerAccActionContext#
+   *    sessionTimerCanceled(org.jdiameter.api.acc.ServerAccSession, java.util.concurrent.ScheduledFuture)
    */
+  @Override
   @SuppressWarnings("unchecked")
   public void sessionTimerCanceled(ServerAccSession appSession, ScheduledFuture timer) throws InternalException {
     logger.info("sessionTimerCanceled :: appSession[" + appSession + "]");
   }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.jdiameter.common.api.app.acc.IAccMessageFactory#getAccMessageCommandCode
-	 * ()
-	 */
-	@Override
-	public int getAccMessageCommandCode() {
-		// TODO Auto-generated method stub
-		return AccountRequest.code;
-	}
+  /*
+   * (non-Javadoc)
+   *
+   * @see org.jdiameter.common.api.app.acc.IAccMessageFactory#getAccMessageCommandCode()
+   */
+  @Override
+  public int getAccMessageCommandCode() {
+    // TODO Auto-generated method stub
+    return AccountRequest.code;
+  }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.jdiameter.common.api.app.acc.IAccMessageFactory#createAccRequest(
-	 * org.jdiameter.api.Request)
-	 */
-	@Override
-	public AccountRequest createAccRequest(Request request) {
-		return new AccountRequestImpl(request);
-	}
+  /*
+   * (non-Javadoc)
+   *
+   * @see org.jdiameter.common.api.app.acc.IAccMessageFactory#createAccRequest(org.jdiameter.api.Request)
+   */
+  @Override
+  public AccountRequest createAccRequest(Request request) {
+    return new AccountRequestImpl(request);
+  }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.jdiameter.common.api.app.acc.IAccMessageFactory#createAccAnswer(org
-	 * .jdiameter.api.Answer)
-	 */
-	@Override
-	public AccountAnswer createAccAnswer(Answer answer) {
-		return new AccountAnswerImpl(answer);
-	}
+  /*
+   * (non-Javadoc)
+   *
+   * @see org.jdiameter.common.api.app.acc.IAccMessageFactory#createAccAnswer(org.jdiameter.api.Answer)
+   */
+  @Override
+  public AccountAnswer createAccAnswer(Answer answer) {
+    return new AccountAnswerImpl(answer);
+  }
 
 }
