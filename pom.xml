@@ -72,7 +72,43 @@
   </modules>
 
   <build>
+
+
+    <extensions>
+      <extension>
+        <groupId>org.apache.maven.wagon</groupId>
+        <artifactId>wagon-webdav-jackrabbit</artifactId>
+        <version>1.0</version>
+      </extension>
+    </extensions>
     <plugins>
+      <plugin>
+        <artifactId>maven-eclipse-plugin</artifactId>
+        <groupId>org.mobicents.tools</groupId>
+        <inherited>false</inherited>
+        <executions />
+        <configuration>
+          <eclipseProjectName>${project.artifactId}</eclipseProjectName>
+          <generateProjectsForModules>false</generateProjectsForModules>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.sonatype.plugins</groupId>
+        <artifactId>nexus-staging-maven-plugin</artifactId>
+        <version>1.6.2</version>
+        <extensions>true</extensions>
+        <configuration>
+          <serverId>restcomm-releases-repository</serverId>
+          <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+        </configuration>
+        <executions>
+          <execution>
+            <id>deploy-to-sonatype</id>
+            <phase>none</phase>
+          </execution>
+        </executions>
+      </plugin>
+
       <!-- Checkstyle -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -310,6 +346,19 @@
       </snapshots>
     </pluginRepository>
   </pluginRepositories>
+
+  <distributionManagement>
+    <repository>
+      <id>onevox</id>
+      <name>Onevox Repository</name>
+      <url>dav:https://devel.onevox.io/repository</url>
+    </repository>
+    <site>
+      <id>onevox</id>
+      <name>Onevox archive</name>
+      <url>dav:http://devel.onevox.io/archive/${project.artifactId}/${project.version}</url>
+    </site>
+  </distributionManagement>
 
   <scm>
     <connection>scm:git:git@github.com:RestComm/jdiameter.git</connection>
