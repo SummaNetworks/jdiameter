@@ -282,12 +282,13 @@ public class MessageImpl implements IMessage {
           if (localAvp.getCode() == Avp.ACCT_APPLICATION_ID) {
             acctApplicationId = localAvp.getUnsigned32();
           }
-        }
-        if (authApplicationId != 0) {
-          rc.add(ApplicationId.createByAuthAppId(vendorId, authApplicationId));
-        }
-        if (acctApplicationId != 0) {
-          rc.add(ApplicationId.createByAccAppId(vendorId, acctApplicationId));
+
+          if (authApplicationId != 0) {
+            rc.add(ApplicationId.createByAuthAppId(vendorId, authApplicationId));
+          }
+          if (acctApplicationId != 0) {
+            rc.add(ApplicationId.createByAccAppId(vendorId, acctApplicationId));
+          }
         }
       }
     }
