@@ -1,29 +1,46 @@
-/*
- * JBoss, Home of Professional Open Source
- * Copyright 2006, Red Hat, Inc. and individual contributors
- * by the @authors tag. See the copyright.txt in the distribution for a
- * full listing of individual contributors.
- *
- * This is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 2.1 of
- * the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
- * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
- */
+ /*
+  * TeleStax, Open Source Cloud Communications
+  * Copyright 2011-2016, TeleStax Inc. and individual contributors
+  * by the @authors tag.
+  *
+  * This program is free software: you can redistribute it and/or modify
+  * under the terms of the GNU Affero General Public License as
+  * published by the Free Software Foundation; either version 3 of
+  * the License, or (at your option) any later version.
+  *
+  * This program is distributed in the hope that it will be useful,
+  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  * GNU Affero General Public License for more details.
+  *
+  * You should have received a copy of the GNU Affero General Public License
+  * along with this program.  If not, see <http://www.gnu.org/licenses/>
+  *
+  * This file incorporates work covered by the following copyright and
+  * permission notice:
+  *
+  *   JBoss, Home of Professional Open Source
+  *   Copyright 2007-2011, Red Hat, Inc. and individual contributors
+  *   by the @authors tag. See the copyright.txt in the distribution for a
+  *   full listing of individual contributors.
+  *
+  *   This is free software; you can redistribute it and/or modify it
+  *   under the terms of the GNU Lesser General Public License as
+  *   published by the Free Software Foundation; either version 2.1 of
+  *   the License, or (at your option) any later version.
+  *
+  *   This software is distributed in the hope that it will be useful,
+  *   but WITHOUT ANY WARRANTY; without even the implied warranty of
+  *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  *   Lesser General Public License for more details.
+  *
+  *   You should have received a copy of the GNU Lesser General Public
+  *   License along with this software; if not, write to the Free
+  *   Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+  *   02110-1301 USA, or see the FSF site: http://www.fsf.org.
+  */
 
 package org.jdiameter.server.impl;
-
-import static org.jdiameter.api.PeerState.DOWN;
-import static org.jdiameter.api.PeerState.INITIAL;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -66,8 +83,11 @@ import org.jdiameter.server.api.IStateMachine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static org.jdiameter.api.PeerState.DOWN;
+import static org.jdiameter.api.PeerState.INITIAL;
+
 /**
- * 
+ *
  * @author erick.svenson@yahoo.com
  * @author <a href="mailto:brainslog@gmail.com"> Alexandre Mendonca </a>
  * @author <a href="mailto:baranowb@gmail.com"> Bartosz Baranowski </a>
@@ -110,15 +130,16 @@ public class PeerImpl extends org.jdiameter.client.impl.controller.PeerImpl impl
     this.ovrManager = oManager;
   }
 
+  @Override
   protected void createPeerStatistics() {
     super.createPeerStatistics();
 
     // Append fsm statistic
     if (this.fsm instanceof IStateMachine) {
-      StatisticRecord[] records = ((IStateMachine) fsm).getStatistic().getRecords(); 
+      StatisticRecord[] records = ((IStateMachine) fsm).getStatistic().getRecords();
       IStatisticRecord[] recordsArray = new IStatisticRecord[records.length];
       int count = 0;
-      for(StatisticRecord st: records) {
+      for (StatisticRecord st: records) {
         recordsArray[count++] = (IStatisticRecord) st;
       }
       this.statistic.appendCounter(recordsArray);
@@ -132,18 +153,22 @@ public class PeerImpl extends org.jdiameter.client.impl.controller.PeerImpl impl
     //}
   }
 
+  @Override
   public boolean isAttemptConnection() {
-    return isAttemptConnection; 
+    return isAttemptConnection;
   }
 
+  @Override
   public IContext getContext() {
     return new LocalActionConext(this);
   }
 
+  @Override
   public IConnection getConnection() {
     return connection;
   }
 
+  @Override
   public void addIncomingConnection(IConnection conn) {
     PeerState state = fsm.getState(PeerState.class);
     if (DOWN  ==  state || INITIAL == state) {
@@ -167,19 +192,22 @@ public class PeerImpl extends org.jdiameter.client.impl.controller.PeerImpl impl
     }
   }
 
+  @Override
   public void setElection(boolean isElection) {
     this.isElection = isElection;
   }
 
+  @Override
   public void notifyOvrManager(IOverloadManager ovrManager) {
     ovrManager.changeNotification(0, getUri(), fsm.getQueueInfo());
   }
 
+  @Override
   public String toString() {
     if (fsm != null) {
-      return "SPeer{" + "Uri=" + uri + "; State=" + fsm.getState(PeerState.class) + "; con="+ connection +"; incCon"+incConnections+" }";
+      return "SPeer{" + "Uri=" + uri + "; State=" + fsm.getState(PeerState.class) + "; con=" + connection + "; incCon" + incConnections + " }";
     }
-    return "SPeer{" + "Uri=" + uri + "; State=" + fsm + "; con="+ connection +"; incCon"+incConnections+" }";
+    return "SPeer{" + "Uri=" + uri + "; State=" + fsm + "; con=" + connection + "; incCon" + incConnections + " }";
   }
 
   protected class LocalActionConext extends ActionContext {
@@ -189,6 +217,7 @@ public class PeerImpl extends org.jdiameter.client.impl.controller.PeerImpl impl
       this.peer = peer;
     }
 
+    @Override
     public void sendCeaMessage(int resultCode, Message cer,  String errMessage) throws TransportException, OverloadException {
       logger.debug("Send CEA message");
 
@@ -216,6 +245,7 @@ public class PeerImpl extends org.jdiameter.client.impl.controller.PeerImpl impl
       sendMessage(message);
     }
 
+    @Override
     public int processCerMessage(String key, IMessage message) {
       logger.debug("Processing CER");
 
@@ -233,7 +263,7 @@ public class PeerImpl extends org.jdiameter.client.impl.controller.PeerImpl impl
         // Process cer
         Set<ApplicationId> newAppId = getCommonApplicationIds(message);
         if (newAppId.isEmpty()) {
-          if(logger.isDebugEnabled()) {
+          if (logger.isDebugEnabled()) {
             logger.debug("Processing CER failed, no common application. Message AppIds [{}]", message.getApplicationIdAvps());
           }
           return ResultCode.NO_COMMON_APPLICATION;
@@ -242,7 +272,7 @@ public class PeerImpl extends org.jdiameter.client.impl.controller.PeerImpl impl
         if (!connection.getKey().equals(key)) { // received cer by other connection
           logger.debug("CER received by other connection [{}]", key);
 
-          switch(fsm.getState(PeerState.class)) {
+          switch (fsm.getState(PeerState.class)) {
             case DOWN:
               resultCode = ResultCode.SUCCESS;
               break;
@@ -303,14 +333,17 @@ public class PeerImpl extends org.jdiameter.client.impl.controller.PeerImpl impl
       return resultCode;
     }
 
+    @Override
     public boolean isRestoreConnection() {
       return isAttemptConnection;
     }
 
+    @Override
     public String getPeerDescription() {
       return PeerImpl.this.toString();
     }
 
+    @Override
     public boolean receiveMessage(IMessage message) {
       logger.debug("Receiving message in server.");
       boolean isProcessed = false;
@@ -327,7 +360,7 @@ public class PeerImpl extends org.jdiameter.client.impl.controller.PeerImpl impl
           return true;
         }
         else {
-          try{
+          try {
             destRealm = destRealmAvp.getDiameterIdentity();
           }
           catch (AvpDataException ade) {
@@ -346,7 +379,7 @@ public class PeerImpl extends org.jdiameter.client.impl.controller.PeerImpl impl
         ApplicationId appId = message.getSingleApplicationId();
         if (appId == null) {
           logger.warn("Receive a message with no Application Id. Answering with 5005 (MISSING_AVP) Result-Code.");
-          sendErrorAnswer(message, "Missing Application-Id", ResultCode.MISSING_AVP); 
+          sendErrorAnswer(message, "Missing Application-Id", ResultCode.MISSING_AVP);
           // TODO: add Auth-Application-Id, Acc-Application-Id and Vendor-Specific-Application-Id, can be empty
           return true;
         }
@@ -354,15 +387,17 @@ public class PeerImpl extends org.jdiameter.client.impl.controller.PeerImpl impl
         // check condition for local processing.
         Avp destHostAvp = req.getAvps().getAvp(Avp.DESTINATION_HOST);
 
-        //messages for local stack:
-        //				-  The Destination-Host AVP contains the local host's identity,
-        //  			    -  The Destination-Host AVP is not present, the Destination-Realm AVP
-        //				   contains a realm the server is configured to process locally, and
-        //				   the Diameter application is locally supported, or
-        //check conditions for immediate consumption.
-        //this includes
+        // 6.1.4.  Processing Local Requests
+        // A request is known to be for local consumption when one of the
+        // following conditions occur:
+        //  -  The Destination-Host AVP contains the local host's identity,
+        //  -  The Destination-Host AVP is not present, the Destination-Realm AVP
+        //     contains a realm the server is configured to process locally, and
+        //     the Diameter application is locally supported, or
+        //  -  Both the Destination-Host and the Destination-Realm are not
+        //     present.
         if (destHostAvp != null) {
-          try{
+          try {
             String destHost = destHostAvp.getDiameterIdentity();
             //FIXME: add check with DNS/names to check 127 vs localhost
             if (destHost.equals(metaData.getLocalPeer().getUri().getFQDN())) {
@@ -372,7 +407,7 @@ public class PeerImpl extends org.jdiameter.client.impl.controller.PeerImpl impl
               IRealm matched = null;
 
               matched = (IRealm) realmTable.matchRealm(req);
-              if(matched != null) {
+              if (matched != null) {
                 action = matched.getLocalAction();
               }
               else {
@@ -392,19 +427,19 @@ public class PeerImpl extends org.jdiameter.client.impl.controller.PeerImpl impl
                   // LocalPeer.realm
                   isProcessed = consumeMessage(message);
                   break;
-                case PROXY: 
+                case PROXY:
                   //TODO: change this its almost the same as above, make it sync, so no router code involved
-                  if(handleByAgent(message, isProcessed, req, matched)) {
+                  if (handleByAgent(message, isProcessed, req, matched)) {
                     isProcessed = true;
                   }
                   break;
                 case RELAY: // might be complicated, lets make it listener
                   // now
-                  isProcessed = consumeMessage(message); //if its not redirected its 
+                  isProcessed = consumeMessage(message); //if its not redirected its
                   break;
                 case REDIRECT:
                   //TODO: change this its almost the same as above, make it sync, so no router code involved
-                  if(handleByAgent(message, isProcessed, req, matched)) {
+                  if (handleByAgent(message, isProcessed, req, matched)) {
                     isProcessed = true;
                   }
                   break;
@@ -414,7 +449,7 @@ public class PeerImpl extends org.jdiameter.client.impl.controller.PeerImpl impl
               //NOTE: this check should be improved, it checks if there is connection to peer, otherwise we cant serve it.
               //possibly also match realm.
               IPeer p = (IPeer) peerTable.getPeer(destHost);
-              if(p != null && p.hasValidConnection()) {	
+              if (p != null && p.hasValidConnection()) {
                 isProcessed = consumeMessage(message);
               }
               else {
@@ -439,15 +474,15 @@ public class PeerImpl extends org.jdiameter.client.impl.controller.PeerImpl impl
           IRealm matched = null;
 
           matched = (IRealm) realmTable.matchRealm(req);
-          if(matched != null) {
+          if (matched != null) {
             action = matched.getLocalAction();
           }
           else {
             // We don't support it locally, its not defined as remote, so send no such realm answer.
-            sendErrorAnswer(message, null, ResultCode.APPLICATION_UNSUPPORTED); 
+            sendErrorAnswer(message, null, ResultCode.APPLICATION_UNSUPPORTED);
             // or REALM_NOT_SERVED ?
             return true;
-          }	
+          }
 
           switch (action) {
             case LOCAL: // always call listener - this covers realms
@@ -456,7 +491,7 @@ public class PeerImpl extends org.jdiameter.client.impl.controller.PeerImpl impl
               break;
             case PROXY:
               //TODO: change this its almost the same as above, make it sync, so no router code involved
-              if( handleByAgent(message, isProcessed, req, matched)) {
+              if ( handleByAgent(message, isProcessed, req, matched)) {
                 isProcessed = true;
               }
               break;
@@ -466,7 +501,7 @@ public class PeerImpl extends org.jdiameter.client.impl.controller.PeerImpl impl
               break;
             case REDIRECT:
               //TODO: change this its almost the same as above, make it sync, so no router code involved
-              if(handleByAgent(message, isProcessed, req, matched)) {
+              if (handleByAgent(message, isProcessed, req, matched)) {
                 isProcessed = true;
               }
               break;
@@ -497,12 +532,12 @@ public class PeerImpl extends org.jdiameter.client.impl.controller.PeerImpl impl
       else {
         try {
           router.registerRequestRouteInfo(message);
-          IMessage answer = (IMessage)matched.getAgent().processRequest(req,matched);
+          IMessage answer = (IMessage) matched.getAgent().processRequest(req, matched);
           if (isDuplicateProtection && answer != null) {
             peerTable.saveToDuplicate(message.getDuplicationKey(), answer);
           }
           isProcessed = true;
-          if(answer != null) {
+          if (answer != null) {
             sendMessage(answer);
           }
           if (statistic.isEnabled()) {
@@ -539,7 +574,7 @@ public class PeerImpl extends org.jdiameter.client.impl.controller.PeerImpl impl
       if (!isProcessed) {
         if (statistic.isEnabled()) {
           // Decrement what we have incremented in super.receiveMessage(message) since it wasn't processed
-          statistic.getRecordByName(IStatisticRecord.Counters.NetGenRejectedRequest.name()).dec(); 
+          statistic.getRecordByName(IStatisticRecord.Counters.NetGenRejectedRequest.name()).dec();
         }
 
         NetworkReqListener listener = network.getListener(message);
@@ -561,7 +596,7 @@ public class PeerImpl extends org.jdiameter.client.impl.controller.PeerImpl impl
             answer.setHopByHopIdentifier(message.getHopByHopIdentifier());
 
             isProcessed = true;
-            try{
+            try {
               sendMessage(answer);
               if (statistic.isEnabled()) {
                 statistic.getRecordByName(IStatisticRecord.Counters.SysGenResponse.name()).inc();
@@ -615,7 +650,7 @@ public class PeerImpl extends org.jdiameter.client.impl.controller.PeerImpl impl
       }
 
       if (isProcessed) {
-        // NOTE: done to inc stat which informs on net work request consumption :)... 
+        // NOTE: done to inc stat which informs on net work request consumption :)...
         if (statistic.isEnabled()) {
           statistic.getRecordByName(IStatisticRecord.Counters.NetGenRequest.name()).inc();
         }
@@ -623,8 +658,11 @@ public class PeerImpl extends org.jdiameter.client.impl.controller.PeerImpl impl
       return isProcessed;
     }
 
+    @Override
     public String toString() {
-      return new StringBuffer("LocalActionConext [isRestoreConnection()=").append(isRestoreConnection()).append(", getPeerDescription()=").append(getPeerDescription()).append(", isConnected()=").append(isConnected()).append(", LocalPeer=").append(metaData.getLocalPeer().getUri()).append(" ]").toString();
+      return new StringBuffer("LocalActionConext [isRestoreConnection()=").append(isRestoreConnection()).append(", getPeerDescription()=").
+          append(getPeerDescription()).append(", isConnected()=").append(isConnected()).append(", LocalPeer=").append(metaData.getLocalPeer().getUri()).
+          append(" ]").toString();
     }
 
   }

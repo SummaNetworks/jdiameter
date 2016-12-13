@@ -4,27 +4,28 @@
  * contributors as indicated by the @authors tag. All rights reserved.
  * See the copyright.txt in the distribution for a full listing
  * of individual contributors.
- * 
+ *
  * This copyrighted material is made available to anyone wishing to use,
  * modify, copy, or redistribute it subject to the terms and conditions
  * of the GNU General Public License, v. 2.0.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of 
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU 
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License,
- * v. 2.0 along with this distribution; if not, write to the Free 
+ * v. 2.0 along with this distribution; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
  * MA 02110-1301, USA.
  */
 package org.mobicents.diameter.stack.functional.acc.base;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.fail;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.net.URI;
 import java.util.Arrays;
 import java.util.Collection;
@@ -45,9 +46,9 @@ import org.junit.runners.Parameterized.Parameters;
 
 /**
  * Simple test for stateful accounting
- * 
+ *
  * 1 Servers (A), 1 Client (C)
- * 
+ *
  * Flow:
  * 1. Client C sends INITIAL ACR to Server A;
  * 2. Server A receives INITIAL, creates new session, processes it under session, answers it;
@@ -55,7 +56,7 @@ import org.junit.runners.Parameterized.Parameters;
  * 4. Server A receives INTERIM, processes it under session, answers it;
  * 5. Client C sends TERMINATE ACR to Server A;
  * 6. Server A receives TERMINATE, processes it under session, answers it;
- * 
+ *
  * @author <a href="mailto:brainslog@gmail.com"> Alexandre Mendonca </a>
  * @author <a href="mailto:baranowb@gmail.com"> Bartosz Baranowski </a>
  */
@@ -133,21 +134,25 @@ public class AccSessionStatefulBasicFlowTest {
   public void testBasicFlow() throws Exception {
     try {
       // pain of parameter tests :) ?
+      waitForMessage();
+      waitForMessage();
+      waitForMessage();
+      
       clientNode.sendInitial();
       waitForMessage();
 
       serverNode1.sendInitial();
       waitForMessage();
-      
+
       clientNode.sendInterim();
       waitForMessage();
-      
+
       serverNode1.sendInterim();
       waitForMessage();
-      
+
       clientNode.sendTermination();
       waitForMessage();
-      
+
       serverNode1.sendTermination();
       waitForMessage();
     }
@@ -215,8 +220,20 @@ public class AccSessionStatefulBasicFlowTest {
     Class<AccSessionStatefulBasicFlowTest> t = AccSessionStatefulBasicFlowTest.class;
     client = t.getClassLoader().getResource(client).toString();
     server1 = t.getClassLoader().getResource(server1).toString();
+    
+    String nettyTcpClient = "configurations/functional-acc/netty/tcp/config-client.xml";
+    String nettyTcpServer1 = "configurations/functional-acc/netty/tcp/config-server-node1.xml";
 
-    return Arrays.asList(new Object[][] { { client, server1 } });
+    nettyTcpClient = t.getClassLoader().getResource(nettyTcpClient).toString();
+    nettyTcpServer1 = t.getClassLoader().getResource(nettyTcpServer1).toString();
+
+    String nettyTlsClient = "configurations/functional-acc/netty/tls/config-client.xml";
+    String nettyTlsServer1 = "configurations/functional-acc/netty/tls/config-server-node1.xml";
+
+    nettyTlsClient = t.getClassLoader().getResource(nettyTlsClient).toString();
+    nettyTlsServer1 = t.getClassLoader().getResource(nettyTlsServer1).toString();
+
+    return Arrays.asList(new Object[][] { { client, server1 }, {nettyTcpClient, nettyTcpServer1}, {nettyTlsClient, nettyTlsServer1} });
   }
 
   private void waitForMessage() {
@@ -227,5 +244,5 @@ public class AccSessionStatefulBasicFlowTest {
       e.printStackTrace();
     }
   }
-
+  
 }

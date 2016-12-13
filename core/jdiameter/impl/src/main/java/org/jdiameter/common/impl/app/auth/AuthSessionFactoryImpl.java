@@ -1,23 +1,20 @@
 /*
- * JBoss, Home of Professional Open Source
- * Copyright 2006, Red Hat, Inc. and individual contributors
- * by the @authors tag. See the copyright.txt in the distribution for a
- * full listing of individual contributors.
+ * TeleStax, Open Source Cloud Communications
+ * Copyright 2011-2016, Telestax Inc and individual contributors
+ * by the @authors tag.
  *
- * This is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 2.1 of
+ * This program is free software: you can redistribute it and/or modify
+ * under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation; either version 3 of
  * the License, or (at your option) any later version.
  *
- * This software is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
- * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
 package org.jdiameter.common.impl.app.auth;
@@ -64,14 +61,14 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Default Diameter Authorization Session Factory implementation
- * 
+ *
  * @author <a href="mailto:baranowb@gmail.com"> Bartosz Baranowski </a>
  * @author <a href="mailto:brainslog@gmail.com"> Alexandre Mendonca </a>
  */
 public class AuthSessionFactoryImpl implements IAuthSessionFactory, IAuthMessageFactory, ServerAuthSessionListener,
-ClientAuthSessionListener, IClientAuthActionContext, IServerAuthActionContext, StateChangeListener<AppSession> {
+    ClientAuthSessionListener, IClientAuthActionContext, IServerAuthActionContext, StateChangeListener<AppSession> {
 
-  private final static long authAppId = 19301L;
+  private static final long authAppId = 19301L;
 
   protected IAuthMessageFactory messageFactory;
   protected ServerAuthSessionListener serverSessionListener;
@@ -79,7 +76,7 @@ ClientAuthSessionListener, IClientAuthActionContext, IServerAuthActionContext, S
   protected ClientAuthSessionListener clientSessionListener;
   protected boolean stateles;
   protected long messageTimeout = 5000;
-  protected Logger logger = LoggerFactory.getLogger(AuthSessionFactoryImpl.class);
+  protected static final Logger logger = LoggerFactory.getLogger(AuthSessionFactoryImpl.class);
   protected ISessionDatasource iss;
   protected ISessionFactory sessionFactory = null;
   protected IServerAuthActionContext serverSessionContext;
@@ -97,6 +94,7 @@ ClientAuthSessionListener, IClientAuthActionContext, IServerAuthActionContext, S
   /**
    * @return the clientSessionContext
    */
+  @Override
   public IClientAuthActionContext getClientSessionContext() {
     return clientSessionContext != null ? clientSessionContext : this;
   }
@@ -105,6 +103,7 @@ ClientAuthSessionListener, IClientAuthActionContext, IServerAuthActionContext, S
    * @param clientSessionContext
    *            the clientSessionContext to set
    */
+  @Override
   public void setClientSessionContext(IClientAuthActionContext clientSessionContext) {
     this.clientSessionContext = clientSessionContext;
   }
@@ -112,6 +111,7 @@ ClientAuthSessionListener, IClientAuthActionContext, IServerAuthActionContext, S
   /**
    * @return the serverSessionContext
    */
+  @Override
   public IServerAuthActionContext getServerSessionContext() {
     return serverSessionContext != null ? serverSessionContext : this;
   }
@@ -120,6 +120,7 @@ ClientAuthSessionListener, IClientAuthActionContext, IServerAuthActionContext, S
    * @param serverSessionContext
    *            the serverSessionContext to set
    */
+  @Override
   public void setServerSessionContext(IServerAuthActionContext serverSessionContext) {
     this.serverSessionContext = serverSessionContext;
   }
@@ -127,6 +128,7 @@ ClientAuthSessionListener, IClientAuthActionContext, IServerAuthActionContext, S
   /**
    * @return the messageTimeout
    */
+  @Override
   public long getMessageTimeout() {
     return messageTimeout;
   }
@@ -135,6 +137,7 @@ ClientAuthSessionListener, IClientAuthActionContext, IServerAuthActionContext, S
    * @param messageTimeout
    *            the messageTimeout to set
    */
+  @Override
   public void setMessageTimeout(long messageTimeout) {
     this.messageTimeout = messageTimeout;
   }
@@ -142,6 +145,7 @@ ClientAuthSessionListener, IClientAuthActionContext, IServerAuthActionContext, S
   /**
    * @return the messageFactory
    */
+  @Override
   public IAuthMessageFactory getMessageFactory() {
     return messageFactory != null ? messageFactory : this;
   }
@@ -150,6 +154,7 @@ ClientAuthSessionListener, IClientAuthActionContext, IServerAuthActionContext, S
    * @param messageFactory
    *            the messageFactory to set
    */
+  @Override
   public void setMessageFactory(IAuthMessageFactory messageFactory) {
     this.messageFactory = messageFactory;
   }
@@ -157,6 +162,7 @@ ClientAuthSessionListener, IClientAuthActionContext, IServerAuthActionContext, S
   /**
    * @return the serverSessionListener
    */
+  @Override
   public ServerAuthSessionListener getServerSessionListener() {
     return serverSessionListener != null ? serverSessionListener : this;
   }
@@ -165,6 +171,7 @@ ClientAuthSessionListener, IClientAuthActionContext, IServerAuthActionContext, S
    * @param serverSessionListener
    *            the serverSessionListener to set
    */
+  @Override
   public void setServerSessionListener(ServerAuthSessionListener serverSessionListener) {
     this.serverSessionListener = serverSessionListener;
   }
@@ -172,6 +179,7 @@ ClientAuthSessionListener, IClientAuthActionContext, IServerAuthActionContext, S
   /**
    * @return the stateListener
    */
+  @Override
   public StateChangeListener<AppSession> getStateListener() {
     return stateListener != null ? stateListener : this;
   }
@@ -180,6 +188,7 @@ ClientAuthSessionListener, IClientAuthActionContext, IServerAuthActionContext, S
    * @param stateListener
    *            the stateListener to set
    */
+  @Override
   public void setStateListener(StateChangeListener<AppSession> stateListener) {
     this.stateListener = stateListener;
   }
@@ -187,6 +196,7 @@ ClientAuthSessionListener, IClientAuthActionContext, IServerAuthActionContext, S
   /**
    * @return the clientSessionListener
    */
+  @Override
   public ClientAuthSessionListener getClientSessionListener() {
     return clientSessionListener != null ? clientSessionListener : this;
   }
@@ -195,14 +205,17 @@ ClientAuthSessionListener, IClientAuthActionContext, IServerAuthActionContext, S
    * @param clientSessionListener
    *            the clientSessionListener to set
    */
+  @Override
   public void setClientSessionListener(ClientAuthSessionListener clientSessionListener) {
     this.clientSessionListener = clientSessionListener;
   }
 
+  @Override
   public boolean isStateles() {
     return stateles;
   }
 
+  @Override
   public void setStateles(boolean stateles) {
     this.stateles = stateles;
   }
@@ -212,7 +225,7 @@ ClientAuthSessionListener, IClientAuthActionContext, IServerAuthActionContext, S
     if (sessionId == null) {
       throw new IllegalArgumentException("SessionId must not be null");
     }
-    if(!this.iss.exists(sessionId)) {
+    if (!this.iss.exists(sessionId)) {
       return null;
     }
     try {
@@ -242,6 +255,7 @@ ClientAuthSessionListener, IClientAuthActionContext, IServerAuthActionContext, S
     return null;
   }
 
+  @Override
   public AppSession getNewSession(String sessionId, Class<? extends AppSession> aClass, ApplicationId applicationId, Object[] args) {
     try {
       if (aClass == ServerAuthSession.class) {
@@ -297,67 +311,92 @@ ClientAuthSessionListener, IClientAuthActionContext, IServerAuthActionContext, S
 
   // Message Factory Methods ------------------------------------------------
 
+  @Override
   public AppAnswerEvent createAuthAnswer(Answer answer) {
     return new AppAnswerEventImpl(answer);
   }
 
+  @Override
   public AppRequestEvent createAuthRequest(Request request) {
     return new AppRequestEventImpl(request);
   }
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see org.jdiameter.common.api.app.auth.IAuthMessageFactory#getAuthMessageCommandCode()
    */
+  @Override
   public int getAuthMessageCommandCode() {
     return 258;
   }
 
+  @Override
   public ApplicationId getApplicationId() {
     return ApplicationId.createByAuthAppId(authAppId);
   }
 
   // Message Handlers -------------------------------------------------------
 
-  public void doAbortSessionRequestEvent(ClientAuthSession appSession, AbortSessionRequest asr) throws InternalException, IllegalDiameterStateException, RouteException, OverloadException {
+  @Override
+  public void doAbortSessionRequestEvent(ClientAuthSession appSession, AbortSessionRequest asr)
+      throws InternalException, IllegalDiameterStateException, RouteException, OverloadException {
     logger.info("Diameter Base AuthorizationSessionFactory :: doAbortSessionRequestEvent :: appSession[{}], ASR[{}]", appSession, asr);
   }
 
-  public void doAbortSessionAnswerEvent(ServerAuthSession appSession, AbortSessionAnswer asa) throws InternalException, IllegalDiameterStateException, RouteException, OverloadException {
+  @Override
+  public void doAbortSessionAnswerEvent(ServerAuthSession appSession, AbortSessionAnswer asa)
+      throws InternalException, IllegalDiameterStateException, RouteException, OverloadException {
     logger.info("Diameter Base AuthorizationSessionFactory :: doAbortSessionAnswerEvent :: appSession[{}], ASA[{}]", appSession, asa);
   }
 
-  public void doSessionTerminationRequestEvent(ServerAuthSession appSession, SessionTermRequest str) throws InternalException, IllegalDiameterStateException, RouteException, OverloadException {
+  @Override
+  public void doSessionTerminationRequestEvent(ServerAuthSession appSession, SessionTermRequest str)
+      throws InternalException, IllegalDiameterStateException, RouteException, OverloadException {
     logger.info("Diameter Base AuthorizationSessionFactory :: doSessionTerminationRequestEvent :: appSession[{}], STR[{}]", appSession, str);
   }
 
-  public void doSessionTerminationAnswerEvent(ClientAuthSession appSession, SessionTermAnswer sta) throws InternalException, IllegalDiameterStateException, RouteException, OverloadException {
+  @Override
+  public void doSessionTerminationAnswerEvent(ClientAuthSession appSession, SessionTermAnswer sta)
+      throws InternalException, IllegalDiameterStateException, RouteException, OverloadException {
     logger.info("Diameter Base AuthorizationSessionFactory :: doSessionTerminationAnswerEvent :: appSession[{}], STA[{}]", appSession, sta);
   }
 
-  public void doAuthRequestEvent(ServerAuthSession appSession, AppRequestEvent request) throws InternalException, IllegalDiameterStateException, RouteException, OverloadException {
+  @Override
+  public void doAuthRequestEvent(ServerAuthSession appSession, AppRequestEvent request)
+      throws InternalException, IllegalDiameterStateException, RouteException, OverloadException {
     logger.info("Diameter Base AuthorizationSessionFactory :: doAuthRequestEvent :: appSession[{}], Request[{}]", appSession, request);
   }
 
-  public void doAuthAnswerEvent(ClientAuthSession appSession, AppRequestEvent request, AppAnswerEvent answer) throws InternalException, IllegalDiameterStateException, RouteException, OverloadException {
-    logger.info("Diameter Base AuthorizationSessionFactory :: doAuthAnswerEvent :: appSession[{}], Request[{}], Answer[{}]", new Object[]{appSession, request, answer});
+  @Override
+  public void doAuthAnswerEvent(ClientAuthSession appSession, AppRequestEvent request, AppAnswerEvent answer)
+      throws InternalException, IllegalDiameterStateException, RouteException, OverloadException {
+    logger.info("Diameter Base AuthorizationSessionFactory :: doAuthAnswerEvent :: appSession[{}], Request[{}], Answer[{}]",
+        new Object[]{appSession, request, answer});
   }
 
-  public void doReAuthRequestEvent(ClientAuthSession appSession, ReAuthRequest rar) throws InternalException, IllegalDiameterStateException, RouteException, OverloadException {
+  @Override
+  public void doReAuthRequestEvent(ClientAuthSession appSession, ReAuthRequest rar)
+      throws InternalException, IllegalDiameterStateException, RouteException, OverloadException {
     logger.info("Diameter Base AuthorizationSessionFactory :: doReAuthRequestEvent :: appSession[{}], RAR[{}]", appSession, rar);
   }
 
-  public void doReAuthAnswerEvent(ServerAuthSession appSession, ReAuthRequest rar, ReAuthAnswer raa) throws InternalException, IllegalDiameterStateException, RouteException, OverloadException {
+  @Override
+  public void doReAuthAnswerEvent(ServerAuthSession appSession, ReAuthRequest rar, ReAuthAnswer raa)
+      throws InternalException, IllegalDiameterStateException, RouteException, OverloadException {
     logger.info("Diameter Base AuthorizationSessionFactory :: doReAuthAnswerEvent :: appSession[{}], RAR[{}], RAA[{}]", new Object[]{appSession, rar, raa});
   }
 
-  public void doOtherEvent(AppSession appSession, AppRequestEvent request, AppAnswerEvent answer) throws InternalException, IllegalDiameterStateException, RouteException, OverloadException {
-    logger.info("Diameter Base AuthorizationSessionFactory :: doOtherEvent :: appSession[{}], Request[{}], Answer[{}]", new Object[]{appSession, request, answer});
+  @Override
+  public void doOtherEvent(AppSession appSession, AppRequestEvent request, AppAnswerEvent answer)
+      throws InternalException, IllegalDiameterStateException, RouteException, OverloadException {
+    logger.info("Diameter Base AuthorizationSessionFactory :: doOtherEvent :: appSession[{}], Request[{}], Answer[{}]",
+        new Object[]{appSession, request, answer});
   }
 
   // State Change Listener --------------------------------------------------
 
+  @Override
   @SuppressWarnings("unchecked")
   public void stateChanged(Enum oldState, Enum newState) {
     logger.info("Diameter Base AuthorizationSessionFactory  :: stateChanged :: oldState[{}], newState[{}]", oldState, newState);
@@ -365,49 +404,55 @@ ClientAuthSessionListener, IClientAuthActionContext, IServerAuthActionContext, S
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see org.jdiameter.api.app.StateChangeListener#stateChanged(java.lang.Object, java.lang.Enum, java.lang.Enum)
    */
+  @Override
   @SuppressWarnings("unchecked")
   public void stateChanged(AppSession source, Enum oldState, Enum newState) {
-    logger.info("Diameter Base AuthorizationSessionFactory :: stateChanged :: source[{}], oldState[{}], newState[{}]", new Object[] {source, oldState, newState});
+    logger.info("Diameter Base AuthorizationSessionFactory :: stateChanged :: source[{}], oldState[{}], newState[{}]",
+        new Object[] {source, oldState, newState});
   }
 
   // Context Methods --------------------------------------------------------
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @seeorg.jdiameter.common.api.app.auth.IClientAuthActionContext#accessTimeoutElapses(org.jdiameter.api.auth.ClientAuthSession)
    */
+  @Override
   public void accessTimeoutElapses(ClientAuthSession session) throws InternalException {
     // TODO Auto-generated method stub
   }
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see org.jdiameter.common.api.app.auth.IClientAuthActionContext#createAccessTimer()
    */
+  @Override
   public long getAccessTimeout() throws InternalException {
     return 20000;
   }
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see org.jdiameter.common.api.app.auth.IClientAuthActionContext#disconnectUserOrDev(org.jdiameter.api.auth.ClientAuthSession, org.jdiameter.api.Message)
    */
+  @Override
   public void disconnectUserOrDev(ClientAuthSession session, Message request) throws InternalException {
     // TODO Auto-generated method stub
   }
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @seeorg.jdiameter.common.api.app.auth.IServerAuthActionContext#
    * accessTimeoutElapses(org.jdiameter.api.auth.ServerAuthSession)
    */
+  @Override
   public void accessTimeoutElapses(ServerAuthSession session) throws InternalException {
     // TODO Auto-generated method stub
   }

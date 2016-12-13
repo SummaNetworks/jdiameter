@@ -26,6 +26,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.InputStream;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -44,12 +46,16 @@ import org.jdiameter.api.Request;
 import org.jdiameter.client.api.controller.IPeer;
 import org.jdiameter.server.impl.StackImpl;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
 /**
- * 
+ *
  * @author <a href="mailto:brainslog@gmail.com"> Alexandre Mendonca </a>
  * @author <a href="mailto:baranowb@gmail.com"> Bartosz Baranowski </a>
  */
+@RunWith(Parameterized.class)
 public class StackConnectTest {
 
   private static Logger logger = Logger.getLogger(StackConnectTest.class);
@@ -58,14 +64,26 @@ public class StackConnectTest {
   // 2. start client + wait for connection
   // 3. stop client, start it again
   // 4. wait for connection
+  String serverConfigName = "jdiameter-server-two.xml";
+  String clientConfigName = "jdiameter-client-two.xml";
 
+  public StackConnectTest(String serverConfigName, String clientConfigName){
+    this.serverConfigName = serverConfigName;
+    this.clientConfigName = clientConfigName;
+  }
+  
+  @Parameters
+  public static Collection<Object[]> data() {
+    return Arrays.asList(new Object[][] { { "jdiameter-server-two.xml", "jdiameter-client-two.xml" },
+      { "netty/tcp/jdiameter-server-two.xml", "netty/tcp/jdiameter-client-two.xml" },
+      { "netty/tls/jdiameter-server-two.xml", "netty/tls/jdiameter-client-two.xml" }});
+  }
+  
   @Test
   public void testConnectUndefined() throws Exception {
     StackImpl server = new StackImpl();
     StackImpl client = new StackImpl();
     try {
-      String serverConfigName = "jdiameter-server-two.xml";
-      String clientConfigName = "jdiameter-client-two.xml";
 
       InputStream serverConfigInputStream = StackConnectTest.class.getClassLoader().getResourceAsStream("configurations/" + serverConfigName);
       InputStream clientConfigInputStream = StackConnectTest.class.getClassLoader().getResourceAsStream("configurations/" + clientConfigName);
@@ -78,13 +96,14 @@ public class StackConnectTest {
       Network network = server.unwrap(Network.class);
       network.addNetworkReqListener(new NetworkReqListener() {
 
+        @Override
         public Answer processRequest(Request request) {
           return null;
         }
       }, ApplicationId.createByAccAppId(193, 19302));
       server.start();
       _wait();
-      
+
       List<Peer> peers = server.unwrap(PeerTable.class).getPeerTable();
       assertEquals("Wrong num of connections, initial setup did not succeed. ", 0, peers.size());
       client.init(clientConfig);
@@ -92,6 +111,7 @@ public class StackConnectTest {
       network = client.unwrap(Network.class);
       network.addNetworkReqListener(new NetworkReqListener() {
 
+        @Override
         public Answer processRequest(Request request) {
           return null;
         }
@@ -106,7 +126,7 @@ public class StackConnectTest {
       assertTrue("Peer not connected. State[" + p.getState(PeerState.class) + "]", ((IPeer) peers.get(0)).isConnected());
       assertEquals("Peer has wrong realm.","mobicents.org", p.getRealmName());
 
-      
+
     }
     finally {
       try {

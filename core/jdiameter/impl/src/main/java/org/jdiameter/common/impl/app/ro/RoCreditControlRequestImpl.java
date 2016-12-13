@@ -1,23 +1,20 @@
 /*
- * JBoss, Home of Professional Open Source
- * Copyright 2008, Red Hat, Inc. and individual contributors
- * by the @authors tag. See the copyright.txt in the distribution for a
- * full listing of individual contributors.
+ * TeleStax, Open Source Cloud Communications
+ * Copyright 2011-2016, Telestax Inc and individual contributors
+ * by the @authors tag.
  *
- * This is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 2.1 of
+ * This program is free software: you can redistribute it and/or modify
+ * under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation; either version 3 of
  * the License, or (at your option) any later version.
  *
- * This software is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
- * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>
  */
 
 package org.jdiameter.common.impl.app.ro;
@@ -33,15 +30,15 @@ import org.slf4j.LoggerFactory;
 
 /**
  * ...
- * 
- * @author <a href="mailto:baranowb@gmail.com"> Bartosz Baranowski </a> 
- * @author <a href="mailto:brainslog@gmail.com"> Alexandre Mendonca </a> 
+ *
+ * @author <a href="mailto:baranowb@gmail.com"> Bartosz Baranowski </a>
+ * @author <a href="mailto:brainslog@gmail.com"> Alexandre Mendonca </a>
  */
 public class RoCreditControlRequestImpl extends AppRequestEventImpl implements RoCreditControlRequest {
 
   private static final long serialVersionUID = 1L;
 
-  protected Logger logger = LoggerFactory.getLogger(RoCreditControlRequestImpl.class);
+  protected static final Logger logger = LoggerFactory.getLogger(RoCreditControlRequestImpl.class);
 
   private static final int REQUESTED_ACTION_AVP_CODE = 436;
   private static final int CC_REQUEST_TYPE_AVP_CODE = 416;
@@ -54,13 +51,15 @@ public class RoCreditControlRequestImpl extends AppRequestEventImpl implements R
     super(request);
   }
 
+  @Override
   public boolean isRequestedActionAVPPresent() {
     return super.message.getAvps().getAvp(REQUESTED_ACTION_AVP_CODE) != null;
   }
 
+  @Override
   public int getRequestedActionAVPValue() {
     Avp requestedActionAvp = super.message.getAvps().getAvp(REQUESTED_ACTION_AVP_CODE);
-    if(requestedActionAvp != null) {
+    if (requestedActionAvp != null) {
       try {
         return requestedActionAvp.getInteger32();
       }
@@ -72,13 +71,15 @@ public class RoCreditControlRequestImpl extends AppRequestEventImpl implements R
     return -1;
   }
 
+  @Override
   public boolean isRequestTypeAVPPresent() {
     return super.message.getAvps().getAvp(CC_REQUEST_TYPE_AVP_CODE) != null;
   }
 
+  @Override
   public int getRequestTypeAVPValue() {
     Avp requestTypeAvp = super.message.getAvps().getAvp(CC_REQUEST_TYPE_AVP_CODE);
-    if(requestTypeAvp != null) {
+    if (requestTypeAvp != null) {
       try {
         return requestTypeAvp.getInteger32();
       }
