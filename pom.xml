@@ -29,7 +29,7 @@
     <mobicents.checkstyle.version>1.0.0.FINAL</mobicents.checkstyle.version>
     <checkstyle.plugin.version>2.9.1</checkstyle.plugin.version>
     <checkstyle.consoleOutput>true</checkstyle.consoleOutput>
-    <checkstyle.failOnError>true</checkstyle.failOnError>
+    <checkstyle.failOnError>false</checkstyle.failOnError>
     <version.com.puppycrawl.tools.checkstyle>6.18</version.com.puppycrawl.tools.checkstyle>
     <compile.source>1.7</compile.source>
   </properties>
@@ -110,6 +110,7 @@
       </plugin>
 
       <!-- Checkstyle -->
+<!--
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
@@ -135,7 +136,6 @@
               </module>
 
               <module name="RegexpSingleline">
-                <!-- \s matches whitespace character, $ matches end of line. -->
                 <property name="format" value="\s+$"/>
                 <property name="message" value="Line has trailing spaces."/>
               </module>
@@ -160,7 +160,6 @@
 
                 <module name="OneStatementPerLine"/>
 
-                <!-- Checks for imports                              -->
                 <module name="AvoidStarImport">
                   <property name="allowStaticMemberImports" value="true"/>
                 </module>
@@ -172,16 +171,11 @@
                   <property name="illegalPkgs" value="junit.framework"/>
                 </module>
 
-                <!-- Modifier Checks                                    -->
                 <module name="ModifierOrder"/>
                 <module name="RedundantModifier"/>
 
-                <!-- Checks for blocks. You know, those {}'s         -->
                 <module name="LeftCurly"/>
 
-                <!-- Checks for common coding problems               -->
-                <!-- Disabled until http://sourceforge.net/tracker/?func=detail&aid=2843447&group_id=29721&atid=397078 is fixed-->
-                <!--<module name="DoubleCheckedLocking"/>-->
                 <module name="EmptyStatement"/>
                 <module name="EmptyBlock">
                   <property name="option" value="TEXT"/>
@@ -190,7 +184,6 @@
                 <module name="EqualsHashCode"/>
                 <module name="IllegalInstantiation"/>
 
-                <!-- Miscellaneous other checks.                   -->
                 <module name="UpperEll"/>
                 <module name="PackageAnnotation"/>
                 <module name="CovariantEquals"/>
@@ -200,7 +193,6 @@
 
             </module>
           </checkstyleRules>
-
           <useFile />
         </configuration>
         <dependencies>
@@ -217,6 +209,7 @@
           </dependency>
         </dependencies>
       </plugin>
+-->
       <plugin>
         <artifactId>maven-eclipse-plugin</artifactId>
         <groupId>org.mobicents.tools</groupId>

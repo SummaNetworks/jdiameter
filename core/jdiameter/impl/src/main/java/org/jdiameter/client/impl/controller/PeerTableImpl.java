@@ -299,6 +299,21 @@ public class PeerTableImpl implements IPeerTable {
   }
 
   @Override
+  public IPeer getLoadBalancePeer() {
+    IPeer peer;
+    logger.debug("In getPeer for LoadBalancePeer");
+    for (String key : peerTable.keySet()){
+      peer = (IPeer)peerTable.get(key);
+      if (peer != null && peer.hasValidConnection()){
+        return peer;
+      }
+    }
+
+    logger.debug("No peer found in getLoadBalancePeer will return null");
+    return null;
+  }
+
+  @Override
   public void removeSessionListener(String sessionId) {
     // XXX: FT/HA // sessionReqListeners.remove(sessionId);
     sessionDatasource.removeSessionListener(sessionId);

@@ -404,9 +404,11 @@ public class RouterImpl implements IRouter {
 
     // Check realm name
     //TODO: check only if it exists?
-    if (matchedRealm == null) {
-      throw new RouteException("Unknown realm name [" + destRealm + "]");
-    }
+    //if (matchedRealm == null) {
+    //  throw new RouteException("Unknown realm name [" + destRealm + "]");
+    //}
+
+    IPeer c = destHost != null ? manager.getLoadBalancePeer() : null;
 
     // THIS IS GET PEER, NOT ROUTE!!!!!!!
     // Redirect processing
@@ -421,7 +423,8 @@ public class RouterImpl implements IRouter {
 
     // Balancing procedure
 
-    IPeer c = destHost != null ? manager.getPeer(destHost) : null;
+    //IPeer c = destHost != null ? manager.getPeer(destHost) : null;
+    //This should return always one PEER to continue, we are supposed to be behind a DRA
 
     if (c != null && c.hasValidConnection()) {
       logger.debug("Found a peer using destination host avp [{}] peer is [{}] with a valid connection.", destHost, c);

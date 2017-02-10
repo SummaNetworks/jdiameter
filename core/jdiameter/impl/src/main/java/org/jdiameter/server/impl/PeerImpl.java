@@ -368,14 +368,14 @@ public class PeerImpl extends org.jdiameter.client.impl.controller.PeerImpl impl
             return true;
           }
         }
-        IRealmTable realmTable = router.getRealmTable();
+//        IRealmTable realmTable = router.getRealmTable();
 
-        if (!realmTable.realmExists(destRealm)) {
+//        if (!realmTable.realmExists(destRealm)) {
           // send no such realm answer.
-          logger.warn("Received a request for an unrecognized realm: [{}]. Answering with 3003 (DIAMETER_REALM_NOT_SERVED) Result-Code.", destRealm);
-          sendErrorAnswer(message, null, ResultCode.REALM_NOT_SERVED);
-          return true;
-        }
+//          logger.warn("Received a request for an unrecognized realm: [{}]. Answering with 3003 (DIAMETER_REALM_NOT_SERVED) Result-Code.", destRealm);
+//          sendErrorAnswer(message, null, ResultCode.REALM_NOT_SERVED);
+//          return true;
+//        }
         ApplicationId appId = message.getSingleApplicationId();
         if (appId == null) {
           logger.warn("Receive a message with no Application Id. Answering with 5005 (MISSING_AVP) Result-Code.");
@@ -400,22 +400,23 @@ public class PeerImpl extends org.jdiameter.client.impl.controller.PeerImpl impl
           try {
             String destHost = destHostAvp.getDiameterIdentity();
             //FIXME: add check with DNS/names to check 127 vs localhost
-            if (destHost.equals(metaData.getLocalPeer().getUri().getFQDN())) {
+
+  //          if (destHost.equals(metaData.getLocalPeer().getUri().getFQDN())) {
 
               // this is for handling possible REDIRECT, destRealm != local.realm
-              LocalAction action = null;
+              LocalAction action = LocalAction.LOCAL;
               IRealm matched = null;
 
-              matched = (IRealm) realmTable.matchRealm(req);
-              if (matched != null) {
-                action = matched.getLocalAction();
-              }
-              else {
+              //matched = (IRealm) realmTable.matchRealm(req);
+              //if (matched != null) {
+              //  action = matched.getLocalAction();
+              //}
+              //else {
                 // We don't support it locally, its not defined as remote, so send no such realm answer.
-                sendErrorAnswer(message, null, ResultCode.APPLICATION_UNSUPPORTED);
+              //  sendErrorAnswer(message, null, ResultCode.APPLICATION_UNSUPPORTED);
                 // or REALM_NOT_SERVED ?
-                return true;
-              }
+              //  return true;
+              //}
 
               //try to add to the message the PEER that is processing it
               logger.info("PeerImpl::receiveMessage::setPeer");
@@ -444,7 +445,8 @@ public class PeerImpl extends org.jdiameter.client.impl.controller.PeerImpl impl
                   }
                   break;
               }
-            }
+    //        }
+/*
             else {
               //NOTE: this check should be improved, it checks if there is connection to peer, otherwise we cant serve it.
               //possibly also match realm.
@@ -461,6 +463,7 @@ public class PeerImpl extends org.jdiameter.client.impl.controller.PeerImpl impl
                 isProcessed = true;
               }
             }
+*/
           }
           catch (AvpDataException ade) {
             logger.warn("Received message with present but unparsable Destination-Host. Answering with 5004 (INVALID_AVP_VALUE) Result-Code.");
@@ -468,6 +471,7 @@ public class PeerImpl extends org.jdiameter.client.impl.controller.PeerImpl impl
             return true;
           }
         }
+/*
         else {
           // we have to match realms :) this MUST include local realm
           LocalAction action = null;
@@ -507,6 +511,7 @@ public class PeerImpl extends org.jdiameter.client.impl.controller.PeerImpl impl
               break;
           }
         }
+*/
       }
       else {
         // answer, let client do its work
