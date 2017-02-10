@@ -10,7 +10,7 @@
 
   <groupId>org.mobicents.diameter</groupId>
   <artifactId>diameter-parent</artifactId>
-  <version>8.0.0-SUMMA</version>
+  <version>8.1.0-SUMMA</version>
 
   <packaging>pom</packaging>
 

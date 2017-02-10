@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.mobicents.diameter.testsuite</groupId>
     <artifactId>testsuite-load-parent</artifactId>
-    <version>8.0.0-SUMMA</version>
+    <version>8.1.0-SUMMA</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
 
@@ -15,8 +15,8 @@
   <name>Restcomm :: Diameter Testsuite :: ${project.artifactId}</name>
 
   <properties>
-    <restcomm.diameter.jdiameter.version>8.0.0-SUMMA</restcomm.diameter.jdiameter.version>
-    <restcomm.diameter.mux.version>8.0.0-SUMMA</restcomm.diameter.mux.version>
+    <restcomm.diameter.jdiameter.version>8.1.0-SUMMA</restcomm.diameter.jdiameter.version>
+    <restcomm.diameter.mux.version>8.1.0-SUMMA</restcomm.diameter.mux.version>
     <get.opt.version>1.0.9</get.opt.version>
     <picocontainer.version>1.2</picocontainer.version>
   </properties>

@@ -7,7 +7,7 @@
   <parent>
     <groupId>org.mobicents.diameter</groupId>
     <artifactId>diameter-parent</artifactId>
-    <version>8.0.0-SUMMA</version>
+    <version>8.1.0-SUMMA</version>
   </parent>
 
   <groupId>org.mobicents.servers.diameter.guide</groupId>
@@ -16,8 +16,8 @@
   <name>Restcomm :: Guide :: Example 1 :: ${project.artifactId}</name>
 
   <properties>
-    <restcomm.diameter.jdiameter.version>8.0.0-SUMMA</restcomm.diameter.jdiameter.version>
-    <restcomm.diameter.mux.version>8.0.0-SUMMA</restcomm.diameter.mux.version>
+    <restcomm.diameter.jdiameter.version>8.1.0-SUMMA</restcomm.diameter.jdiameter.version>
+    <restcomm.diameter.mux.version>8.1.0-SUMMA</restcomm.diameter.mux.version>
     <get.opt.version>1.0.9</get.opt.version>
     <picocontainer.version>1.2</picocontainer.version>
     <slf4j.version>1.5.8</slf4j.version>
